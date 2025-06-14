@@ -19,7 +19,15 @@ reserved = {
    'return': 'RETURN',
    'import': 'IMPORT',
    'const': 'CONST',
-   'final': 'FINAL'
+   'final': 'FINAL',
+   #Alejandro Sornoza
+   'for':'FOR',
+   'return': 'RETURN',
+   'var': 'VAR',
+   'switch': 'SWITCH',
+   'case': 'CASE',
+   'break': 'BREAK',
+   'continue': 'CONTINUE'
 }
 
 tokens = [
@@ -48,7 +56,19 @@ tokens = [
     'COLON',
     'SEMICOLON',
     'NOT',
-    'INTDIV'
+    'INTDIV',
+    #Alejandro Sornoza
+    'PLUSEQ',
+    'MINUSEQ',
+    'TIMESEQ',
+    'DIVEQ',
+    'NULLASSIGN',
+    'MINSIGNEQ',
+    'MAXSIGNEQ',
+    'QMARK_DOT',
+    'NULLCOALESCING',
+    'LBRACKET',
+    'RBRACKET'
 ] + list(reserved.values())
 
 t_PLUS    = r'\+'
@@ -73,12 +93,24 @@ t_COLON = r':'
 t_SEMICOLON = r';'
 t_NOT= r'!'
 t_INTDIV = r'~\/'
+#Alejandro Sornoza
+t_PLUSEQ = r'\+='
+t_MINUSEQ = r'-='
+t_TIMESEQ = r'\*='
+t_DIVEQ = r'/='
+t_NULLASSIGN = r'\?\?='
+t_MINSIGNEQ = r'<='
+t_MAXSIGNEQ = r'>='
+t_QMARK_DOT = r'\?\.'
+t_NULLCOALESCING = r'\?\?'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
 
 
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID')    # Check for reserved words
+    t.type = reserved.get(t.value,'ID')
     return t
 
 def t_NUMBER(t):
@@ -99,6 +131,8 @@ def t_STRING_LITERAL(t):
     r'\"([^\\\"]|\\.)*\"'
     t.value = t.value[1:-1]
 
+#Alejandro Sornoza
+
 t_ignore = ' \t'
 
 def t_newline(t):
@@ -112,12 +146,12 @@ def t_error(t):
 #Crear analizador léxico
 lexer = lex.lex()
 
-archivos = ['algoritmo1.dart', 'algoritmo2.dart']
+archivos = ['algoritmo1.dart', 'algoritmo2.dart', 'algoritmo3.dart']
 
 usuarios_por_archivo = {
     'algoritmo1.dart': 'ljbarzol',
-    'algoritmo2.dart': 'vic28code'
-    #'algoritmo3.dart': 'AlejandroSV2004'
+    'algoritmo2.dart': 'vic28code',
+    'algoritmo3.dart': 'AlejandroSV2004'
 }
 
 carpeta_logs = "logsArchivos"
@@ -150,4 +184,3 @@ lexer.input(data)
 print("Tokens encontrados:")
 for tok in lexer:
     print(tok)
-
