@@ -5,6 +5,18 @@ reserved = {
    'then' : 'THEN',
    'else' : 'ELSE',
    'while' : 'WHILE',
+   #Hilda Angulo
+   'int' : 'INT',
+   'double' : 'DOUBLE',
+   'bool' : 'BOOL',
+   'String' : 'STRING',
+   'class': 'CLASS',
+   'extends': 'EXTENDS',
+   'implements': 'IMPLEMENTS',
+   'return': 'RETURN',
+   'import': 'IMPORT',
+   'const': 'CONST',
+   'final': 'FINAL'
 }
 
 tokens = [
@@ -20,6 +32,20 @@ tokens = [
     'SQUOTE',
     'ID',
     'NUMBER',
+    #Hilda Angulo
+    'EQEQ',
+    'NEQ',
+    'MINSIGN',
+    'MAXSIGN',
+    'AND',
+    'OR',
+    'COMMENT',
+    'STRING_LITERAL',
+    'MODULE',
+    'COLON',
+    'SEMICOLON',
+    'NOT',
+    'INTDIV'
 ] + list(reserved.values())
 
 t_PLUS    = r'\+'
@@ -32,6 +58,20 @@ t_RPAREN  = r'\)'
 t_LBRACES = r'{'
 t_RBRACES = r'}'
 t_SQUOTE = r'\''
+#Hilda Angulo
+t_EQEQ = r'=='
+t_NEQ = r'!='
+t_MINSIGN = r'<'
+t_MAXSIGN = r'>'
+t_AND = r'&&'
+t_OR = r'\|\|'
+t_MODULE = r'%'
+t_COLON = r':'
+t_SEMICOLON = r';'
+t_NOT= r'!'
+t_INTDIV = r'~\/'
+
+
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -39,9 +79,22 @@ def t_ID(t):
     return t
 
 def t_NUMBER(t):
-    r'\d+'
-    t.value = int(t.value)
+    r'\d+(\.\d+)?'
+    if '.' in t.value:
+        t.value = float(t.value)
+    else:
+        t.value = int(t.value)
     return t
+
+#Hilda Angulo
+
+def t_COMMENT(t):
+    r'//.*'
+    pass
+
+def t_STRING_LITERAL(t):
+    r'\"([^\\\"]|\\.)*\"'
+    t.value = t.value[1:-1]
 
 t_ignore = ' \t'
 
@@ -56,8 +109,16 @@ def t_error(t):
 #Crear analizador léxico
 lexer = lex.lex()
 
-with open('algoritmo1.dart', 'r', encoding='utf-8') as archivo:
-    data = archivo.read()
+archivos = ['algoritmo1.dart', 'algoritmo2.dart']
+
+for nombre in archivos:
+    with open(nombre, 'r', encoding='utf-8') as archivo:
+        data = archivo.read()
+        print(f"\nTokens de {nombre}:")
+        lexer.input(data)
+        for tok in lexer:
+            print(tok)
+
 
 #PRUEBA 
 lexer.input(data)
