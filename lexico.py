@@ -1,4 +1,7 @@
+import os
+from datetime import datetime
 import ply.lex as lex
+
 
 reserved = {
    'if' : 'IF',
@@ -111,15 +114,35 @@ lexer = lex.lex()
 
 archivos = ['algoritmo1.dart', 'algoritmo2.dart']
 
-for nombre in archivos:
-    with open(nombre, 'r', encoding='utf-8') as archivo:
+usuarios_por_archivo = {
+    'algoritmo1.dart': 'ljbarzol',
+    'algoritmo2.dart': 'vic28code'
+    #'algoritmo3.dart': 'AlejandroSV2004'
+}
+
+carpeta_logs = "logsArchivos"
+os.makedirs(carpeta_logs, exist_ok=True)
+
+for archivo_nombre in archivos:
+    with open(archivo_nombre, 'r', encoding='utf-8') as archivo:
         data = archivo.read()
-        print(f"\nTokens de {nombre}:")
         lexer.input(data)
-        for tok in lexer:
-            print(tok)
 
+        usuario = usuarios_por_archivo.get(archivo_nombre, 'desconocido')
+        fecha_hora = datetime.now().strftime("%d-%m-%Y-%Hh%M")
+        nombre_log = f"lexico-{usuario}-{fecha_hora}.txt"
+        ruta_log = os.path.join(carpeta_logs, nombre_log)
 
+        with open(ruta_log, 'w', encoding='utf-8') as log:
+            log.write(f"Tokens de {archivo_nombre}:\n")
+            try:
+                for tok in lexer:
+                    log.write(f"{tok}\n")
+            except Exception as e:
+                log.write(f"Error: {e}\n")
+
+        print(f"Log creado: {ruta_log}")
+        
 #PRUEBA 
 lexer.input(data)
 
