@@ -66,3 +66,4 @@ lexer.input(data)
 print("Tokens encontrados:")
 for tok in lexer:
     print(tok)
+
