@@ -2,8 +2,55 @@ import os
 from datetime import datetime
 import ply.lex as lex
 
+#FUNCIONES
 
+#Leidy Barzola
+
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value,'ID')
+    return t
+
+def t_NUMBER(t):
+    r'\d+(\.\d+)?'
+    if '.' in t.value:
+        t.value = float(t.value)
+    else:
+        t.value = int(t.value)
+    return t
+
+#Hilda Angulo
+
+def t_COMMENT(t):
+    r'//.*'
+    pass
+
+def t_STRING_LITERAL(t):
+    r'\"([^\\\"]|\\.)*\"'
+    t.value = t.value[1:-1]
+
+#Alejandro Sornoza
+
+t_ignore = ' \t'
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+def t_error(t):
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+
+
+def t_COMMENT_MULTILINE(t):
+    r'/\*[^*]*\*+(?:[^/*][^*]*\*+)*/'
+    t.lexer.lineno += t.value.count('\n')  # Actualiza número de línea
+    pass
+
+
+#PALABRAS RESERVADAS 
 reserved = {
+   #Leidy Barzola
    'if' : 'IF',
    'then' : 'THEN',
    'else' : 'ELSE',
@@ -30,7 +77,11 @@ reserved = {
    'continue': 'CONTINUE'
 }
 
+#TOKENS
 tokens = [
+    #Leidy Barzola
+    'DOT',
+    'COMMA',
     'PLUS',
     'MINUS',
     'TIMES',
@@ -71,6 +122,8 @@ tokens = [
     'RBRACKET'
 ] + list(reserved.values())
 
+t_DOT = r'\.'
+t_COMMA = r'\,'
 t_PLUS    = r'\+'
 t_MINUS   = r'-'
 t_TIMES   = r'\*'
@@ -107,42 +160,6 @@ t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 
 
-
-def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID')
-    return t
-
-def t_NUMBER(t):
-    r'\d+(\.\d+)?'
-    if '.' in t.value:
-        t.value = float(t.value)
-    else:
-        t.value = int(t.value)
-    return t
-
-#Hilda Angulo
-
-def t_COMMENT(t):
-    r'//.*'
-    pass
-
-def t_STRING_LITERAL(t):
-    r'\"([^\\\"]|\\.)*\"'
-    t.value = t.value[1:-1]
-
-#Alejandro Sornoza
-
-t_ignore = ' \t'
-
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-
-def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
-    t.lexer.skip(1)
-
 #Crear analizador léxico
 lexer = lex.lex()
 
@@ -160,6 +177,7 @@ os.makedirs(carpeta_logs, exist_ok=True)
 for archivo_nombre in archivos:
     with open(archivo_nombre, 'r', encoding='utf-8') as archivo:
         data = archivo.read()
+        lexer.lineno = 1  
         lexer.input(data)
 
         usuario = usuarios_por_archivo.get(archivo_nombre, 'desconocido')
@@ -179,8 +197,3 @@ for archivo_nombre in archivos:
         
 #PRUEBA 
 lexer.input(data)
-
-#Imprimir los token generados(por arreglar para ponerlo en log)
-print("Tokens encontrados:")
-for tok in lexer:
-    print(tok)
