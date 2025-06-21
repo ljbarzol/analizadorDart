@@ -63,6 +63,7 @@ reserved = {
    'class': 'CLASS',
    'extends': 'EXTENDS',
    'implements': 'IMPLEMENTS',
+   'void' : 'VOID',
    'return': 'RETURN',
    'import': 'IMPORT',
    'const': 'CONST',
