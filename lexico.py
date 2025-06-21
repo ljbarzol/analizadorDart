@@ -26,9 +26,18 @@ def t_COMMENT(t):
     pass
 
 def t_STRING_LITERAL(t):
-    r'\"([^\\\"]|\\.)*\"'
-    t.value = t.value[1:-1]
+    r'\"([^\\\"]|\\.)*\"|\'([^\\\']|\\.)*\''
+    import re
+    raw = t.value[1:-1]
+    parts = re.split(r'(\$[a-zA-Z_][a-zA-Z0-9_]*)', raw)
+    t.value = []
+    for part in parts:
+        if part.startswith('$'):
+            t.value.append(('var', part[1:]))  # elimina el '$'
+        else:
+            t.value.append(('str', part))
     return t
+
 
 
 #Alejandro Sornoza
@@ -126,6 +135,8 @@ tokens = [
     'LBRACKET',
     'RBRACKET',
     'QMARK',
+    'PLUSPLUS',
+    'MINUSMINUS'
 ] + list(reserved.values())
 
 t_DOT = r'\.'
@@ -165,6 +176,8 @@ t_QMARK_DOT = r'\?\.'
 t_NULLCOALESCING = r'\?\?'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
+t_PLUSPLUS = r'\+\+'
+t_MINUSMINUS = r'--'
 
 
 #Crear analizador léxico
