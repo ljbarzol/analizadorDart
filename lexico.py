@@ -28,6 +28,8 @@ def t_COMMENT(t):
 def t_STRING_LITERAL(t):
     r'\"([^\\\"]|\\.)*\"'
     t.value = t.value[1:-1]
+    return t
+
 
 #Alejandro Sornoza
 
@@ -76,7 +78,8 @@ reserved = {
    'switch': 'SWITCH',
    'case': 'CASE',
    'break': 'BREAK',
-   'continue': 'CONTINUE'
+   'continue': 'CONTINUE',
+   'print': 'PRINT'
 }
 
 #TOKENS
@@ -121,7 +124,8 @@ tokens = [
     'QMARK_DOT',
     'NULLCOALESCING',
     'LBRACKET',
-    'RBRACKET'
+    'RBRACKET',
+    'QMARK',
 ] + list(reserved.values())
 
 t_DOT = r'\.'
@@ -149,6 +153,7 @@ t_SEMICOLON = r';'
 t_NOT= r'!'
 t_INTDIV = r'~\/'
 #Alejandro Sornoza
+t_QMARK = r'\?'
 t_PLUSEQ = r'\+='
 t_MINUSEQ = r'-='
 t_TIMESEQ = r'\*='

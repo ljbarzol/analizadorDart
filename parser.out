@@ -1,0 +1,4087 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    BREAK
+    CASE
+    COMMENT
+    CONST
+    CONTINUE
+    DIVEQ
+    EXTENDS
+    FINAL
+    IMPLEMENTS
+    IMPORT
+    INTDIV
+    MINUSEQ
+    MODULE
+    NULLASSIGN
+    NULLCOALESCING
+    PLUSEQ
+    QMARK_DOT
+    SQUOTE
+    SWITCH
+    THEN
+    TIMESEQ
+    VAR
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> classes functions
+Rule 2     program -> instructions
+Rule 3     classes -> class classes
+Rule 4     classes -> empty
+Rule 5     expression -> ID DOT ID LPAREN RPAREN
+Rule 6     class -> CLASS ID LBRACE class_body RBRACE
+Rule 7     class_body -> class_member class_body
+Rule 8     class_body -> empty
+Rule 9     class_member -> class_property
+Rule 10    class_member -> method
+Rule 11    method -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+Rule 12    class_property -> type ID SEMICOLON
+Rule 13    type -> INT
+Rule 14    type -> DOUBLE
+Rule 15    type -> STRING
+Rule 16    type -> BOOL
+Rule 17    type -> VOID
+Rule 18    expression -> expression AND expression
+Rule 19    expression -> expression OR expression
+Rule 20    expression -> expression EQEQ expression
+Rule 21    expression -> expression NEQ expression
+Rule 22    expression -> expression MINSIGN expression
+Rule 23    expression -> expression MAXSIGN expression
+Rule 24    expression -> expression MINSIGNEQ expression
+Rule 25    expression -> expression MAXSIGNEQ expression
+Rule 26    expression -> NOT expression
+Rule 27    expression -> expression PLUS expression
+Rule 28    expression -> expression MINUS expression
+Rule 29    expression -> expression TIMES expression
+Rule 30    expression -> expression DIVIDE expression
+Rule 31    expression -> term
+Rule 32    term -> factor
+Rule 33    factor -> NUMBER
+Rule 34    factor -> STRING_LITERAL
+Rule 35    factor -> ID
+Rule 36    factor -> LPAREN expression RPAREN
+Rule 37    instructions -> instruction instructions
+Rule 38    instructions -> empty
+Rule 39    instruction -> assignment
+Rule 40    instruction -> print_statement
+Rule 41    instruction -> if_else
+Rule 42    assignment -> ID EQUALS expression SEMICOLON
+Rule 43    assignment -> type ID EQUALS expression SEMICOLON
+Rule 44    expression -> expression QMARK expression COLON expression
+Rule 45    print_statement -> PRINT LPAREN expression RPAREN SEMICOLON
+Rule 46    parameters -> type ID COMMA parameters
+Rule 47    parameters -> type ID
+Rule 48    parameters -> empty
+Rule 49    return_statement -> RETURN expression SEMICOLON
+Rule 50    function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+Rule 51    main_function -> VOID MAIN LPAREN RPAREN LBRACE body RBRACE
+Rule 52    function -> function_with_return
+Rule 53    function -> main_function
+Rule 54    functions -> function functions
+Rule 55    functions -> empty
+Rule 56    body -> instructions
+Rule 57    if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+Rule 58    instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+Rule 59    instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+Rule 60    expression -> LBRACKET expression_list RBRACKET
+Rule 61    expression_list -> expression COMMA expression_list
+Rule 62    expression_list -> expression
+Rule 63    expression_list -> empty
+Rule 64    empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND                  : 18
+BOOL                 : 16
+BREAK                : 
+CASE                 : 
+CLASS                : 6
+COLON                : 44
+COMMA                : 46 61
+COMMENT              : 
+CONST                : 
+CONTINUE             : 
+DIVEQ                : 
+DIVIDE               : 30
+DOT                  : 5
+DOUBLE               : 14
+ELSE                 : 57
+EQEQ                 : 20
+EQUALS               : 42 43
+EXTENDS              : 
+FINAL                : 
+FOR                  : 59
+ID                   : 5 5 6 11 12 35 42 43 46 47 50
+IF                   : 57
+IMPLEMENTS           : 
+IMPORT               : 
+INT                  : 13
+INTDIV               : 
+LBRACE               : 6 11 50 51 57 57 58 59
+LBRACKET             : 60
+LPAREN               : 5 11 36 45 50 51 57 58 59
+MAIN                 : 51
+MAXSIGN              : 23
+MAXSIGNEQ            : 25
+MINSIGN              : 22
+MINSIGNEQ            : 24
+MINUS                : 28
+MINUSEQ              : 
+MODULE               : 
+NEQ                  : 21
+NOT                  : 26
+NULLASSIGN           : 
+NULLCOALESCING       : 
+NUMBER               : 33
+OR                   : 19
+PLUS                 : 27
+PLUSEQ               : 
+PRINT                : 45
+QMARK                : 44
+QMARK_DOT            : 
+RBRACE               : 6 11 50 51 57 57 58 59
+RBRACKET             : 60
+RETURN               : 49
+RPAREN               : 5 11 36 45 50 51 57 58 59
+SEMICOLON            : 12 42 43 45 49 59
+SQUOTE               : 
+STRING               : 15
+STRING_LITERAL       : 34
+SWITCH               : 
+THEN                 : 
+TIMES                : 29
+TIMESEQ              : 
+VAR                  : 
+VOID                 : 17 51
+WHILE                : 58
+error                : 
+
+Nonterminals, with rules where they appear
+
+assignment           : 39 59 59
+body                 : 11 50 51
+class                : 3
+class_body           : 6 7
+class_member         : 7
+class_property       : 9
+classes              : 1 3
+empty                : 4 8 38 48 55 63
+expression           : 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 27 27 28 28 29 29 30 30 36 42 43 44 44 44 45 49 57 58 59 61 62
+expression_list      : 60 61
+factor               : 32
+function             : 54
+function_with_return : 52
+functions            : 1 54
+if_else              : 41
+instruction          : 37
+instructions         : 2 37 56 57 57 58 59
+main_function        : 53
+method               : 10
+parameters           : 11 46 50
+print_statement      : 40
+program              : 0
+return_statement     : 11 50
+term                 : 31
+type                 : 11 12 43 46 47 50
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . classes functions
+    (2) program -> . instructions
+    (3) classes -> . class classes
+    (4) classes -> . empty
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (6) class -> . CLASS ID LBRACE class_body RBRACE
+    (64) empty -> .
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+  ! shift/reduce conflict for INT resolved as shift
+  ! shift/reduce conflict for DOUBLE resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for BOOL resolved as shift
+  ! shift/reduce conflict for VOID resolved as shift
+    CLASS           shift and go to state 7
+    $end            reduce using rule 64 (empty -> .)
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+  ! VOID            [ reduce using rule 64 (empty -> .) ]
+  ! INT             [ reduce using rule 64 (empty -> .) ]
+  ! DOUBLE          [ reduce using rule 64 (empty -> .) ]
+  ! STRING          [ reduce using rule 64 (empty -> .) ]
+  ! BOOL            [ reduce using rule 64 (empty -> .) ]
+
+    program                        shift and go to state 1
+    classes                        shift and go to state 2
+    instructions                   shift and go to state 3
+    class                          shift and go to state 4
+    empty                          shift and go to state 5
+    instruction                    shift and go to state 6
+    assignment                     shift and go to state 9
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+    type                           shift and go to state 14
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> classes . functions
+    (54) functions -> . function functions
+    (55) functions -> . empty
+    (52) function -> . function_with_return
+    (53) function -> . main_function
+    (64) empty -> .
+    (50) function_with_return -> . type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+    (51) main_function -> . VOID MAIN LPAREN RPAREN LBRACE body RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    $end            reduce using rule 64 (empty -> .)
+    VOID            shift and go to state 28
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+
+    functions                      shift and go to state 22
+    function                       shift and go to state 23
+    empty                          shift and go to state 24
+    function_with_return           shift and go to state 25
+    main_function                  shift and go to state 26
+    type                           shift and go to state 27
+
+state 3
+
+    (2) program -> instructions .
+
+    $end            reduce using rule 2 (program -> instructions .)
+
+
+state 4
+
+    (3) classes -> class . classes
+    (3) classes -> . class classes
+    (4) classes -> . empty
+    (6) class -> . CLASS ID LBRACE class_body RBRACE
+    (64) empty -> .
+
+    CLASS           shift and go to state 7
+    VOID            reduce using rule 64 (empty -> .)
+    INT             reduce using rule 64 (empty -> .)
+    DOUBLE          reduce using rule 64 (empty -> .)
+    STRING          reduce using rule 64 (empty -> .)
+    BOOL            reduce using rule 64 (empty -> .)
+    $end            reduce using rule 64 (empty -> .)
+
+    class                          shift and go to state 4
+    classes                        shift and go to state 29
+    empty                          shift and go to state 30
+
+state 5
+
+    (4) classes -> empty .
+    (38) instructions -> empty .
+
+  ! reduce/reduce conflict for $end resolved using rule 4 (classes -> empty .)
+    VOID            reduce using rule 4 (classes -> empty .)
+    INT             reduce using rule 4 (classes -> empty .)
+    DOUBLE          reduce using rule 4 (classes -> empty .)
+    STRING          reduce using rule 4 (classes -> empty .)
+    BOOL            reduce using rule 4 (classes -> empty .)
+    $end            reduce using rule 4 (classes -> empty .)
+
+  ! $end            [ reduce using rule 38 (instructions -> empty .) ]
+
+
+state 6
+
+    (37) instructions -> instruction . instructions
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (64) empty -> .
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    $end            reduce using rule 64 (empty -> .)
+    RBRACE          reduce using rule 64 (empty -> .)
+    RETURN          reduce using rule 64 (empty -> .)
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    instruction                    shift and go to state 6
+    instructions                   shift and go to state 31
+    empty                          shift and go to state 32
+    assignment                     shift and go to state 9
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+    type                           shift and go to state 14
+
+state 7
+
+    (6) class -> CLASS . ID LBRACE class_body RBRACE
+
+    ID              shift and go to state 33
+
+
+state 8
+
+    (42) assignment -> ID . EQUALS expression SEMICOLON
+
+    EQUALS          shift and go to state 34
+
+
+state 9
+
+    (39) instruction -> assignment .
+
+    WHILE           reduce using rule 39 (instruction -> assignment .)
+    FOR             reduce using rule 39 (instruction -> assignment .)
+    ID              reduce using rule 39 (instruction -> assignment .)
+    PRINT           reduce using rule 39 (instruction -> assignment .)
+    IF              reduce using rule 39 (instruction -> assignment .)
+    INT             reduce using rule 39 (instruction -> assignment .)
+    DOUBLE          reduce using rule 39 (instruction -> assignment .)
+    STRING          reduce using rule 39 (instruction -> assignment .)
+    BOOL            reduce using rule 39 (instruction -> assignment .)
+    VOID            reduce using rule 39 (instruction -> assignment .)
+    $end            reduce using rule 39 (instruction -> assignment .)
+    RBRACE          reduce using rule 39 (instruction -> assignment .)
+    RETURN          reduce using rule 39 (instruction -> assignment .)
+
+
+state 10
+
+    (40) instruction -> print_statement .
+
+    WHILE           reduce using rule 40 (instruction -> print_statement .)
+    FOR             reduce using rule 40 (instruction -> print_statement .)
+    ID              reduce using rule 40 (instruction -> print_statement .)
+    PRINT           reduce using rule 40 (instruction -> print_statement .)
+    IF              reduce using rule 40 (instruction -> print_statement .)
+    INT             reduce using rule 40 (instruction -> print_statement .)
+    DOUBLE          reduce using rule 40 (instruction -> print_statement .)
+    STRING          reduce using rule 40 (instruction -> print_statement .)
+    BOOL            reduce using rule 40 (instruction -> print_statement .)
+    VOID            reduce using rule 40 (instruction -> print_statement .)
+    $end            reduce using rule 40 (instruction -> print_statement .)
+    RBRACE          reduce using rule 40 (instruction -> print_statement .)
+    RETURN          reduce using rule 40 (instruction -> print_statement .)
+
+
+state 11
+
+    (41) instruction -> if_else .
+
+    WHILE           reduce using rule 41 (instruction -> if_else .)
+    FOR             reduce using rule 41 (instruction -> if_else .)
+    ID              reduce using rule 41 (instruction -> if_else .)
+    PRINT           reduce using rule 41 (instruction -> if_else .)
+    IF              reduce using rule 41 (instruction -> if_else .)
+    INT             reduce using rule 41 (instruction -> if_else .)
+    DOUBLE          reduce using rule 41 (instruction -> if_else .)
+    STRING          reduce using rule 41 (instruction -> if_else .)
+    BOOL            reduce using rule 41 (instruction -> if_else .)
+    VOID            reduce using rule 41 (instruction -> if_else .)
+    $end            reduce using rule 41 (instruction -> if_else .)
+    RBRACE          reduce using rule 41 (instruction -> if_else .)
+    RETURN          reduce using rule 41 (instruction -> if_else .)
+
+
+state 12
+
+    (58) instruction -> WHILE . LPAREN expression RPAREN LBRACE instructions RBRACE
+
+    LPAREN          shift and go to state 35
+
+
+state 13
+
+    (59) instruction -> FOR . LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+
+    LPAREN          shift and go to state 36
+
+
+state 14
+
+    (43) assignment -> type . ID EQUALS expression SEMICOLON
+
+    ID              shift and go to state 37
+
+
+state 15
+
+    (45) print_statement -> PRINT . LPAREN expression RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 38
+
+
+state 16
+
+    (57) if_else -> IF . LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+
+    LPAREN          shift and go to state 39
+
+
+state 17
+
+    (13) type -> INT .
+
+    ID              reduce using rule 13 (type -> INT .)
+
+
+state 18
+
+    (14) type -> DOUBLE .
+
+    ID              reduce using rule 14 (type -> DOUBLE .)
+
+
+state 19
+
+    (15) type -> STRING .
+
+    ID              reduce using rule 15 (type -> STRING .)
+
+
+state 20
+
+    (16) type -> BOOL .
+
+    ID              reduce using rule 16 (type -> BOOL .)
+
+
+state 21
+
+    (17) type -> VOID .
+
+    ID              reduce using rule 17 (type -> VOID .)
+
+
+state 22
+
+    (1) program -> classes functions .
+
+    $end            reduce using rule 1 (program -> classes functions .)
+
+
+state 23
+
+    (54) functions -> function . functions
+    (54) functions -> . function functions
+    (55) functions -> . empty
+    (52) function -> . function_with_return
+    (53) function -> . main_function
+    (64) empty -> .
+    (50) function_with_return -> . type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+    (51) main_function -> . VOID MAIN LPAREN RPAREN LBRACE body RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    $end            reduce using rule 64 (empty -> .)
+    VOID            shift and go to state 28
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+
+    function                       shift and go to state 23
+    functions                      shift and go to state 40
+    empty                          shift and go to state 24
+    function_with_return           shift and go to state 25
+    main_function                  shift and go to state 26
+    type                           shift and go to state 27
+
+state 24
+
+    (55) functions -> empty .
+
+    $end            reduce using rule 55 (functions -> empty .)
+
+
+state 25
+
+    (52) function -> function_with_return .
+
+    VOID            reduce using rule 52 (function -> function_with_return .)
+    INT             reduce using rule 52 (function -> function_with_return .)
+    DOUBLE          reduce using rule 52 (function -> function_with_return .)
+    STRING          reduce using rule 52 (function -> function_with_return .)
+    BOOL            reduce using rule 52 (function -> function_with_return .)
+    $end            reduce using rule 52 (function -> function_with_return .)
+
+
+state 26
+
+    (53) function -> main_function .
+
+    VOID            reduce using rule 53 (function -> main_function .)
+    INT             reduce using rule 53 (function -> main_function .)
+    DOUBLE          reduce using rule 53 (function -> main_function .)
+    STRING          reduce using rule 53 (function -> main_function .)
+    BOOL            reduce using rule 53 (function -> main_function .)
+    $end            reduce using rule 53 (function -> main_function .)
+
+
+state 27
+
+    (50) function_with_return -> type . ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+
+    ID              shift and go to state 41
+
+
+state 28
+
+    (51) main_function -> VOID . MAIN LPAREN RPAREN LBRACE body RBRACE
+    (17) type -> VOID .
+
+    MAIN            shift and go to state 42
+    ID              reduce using rule 17 (type -> VOID .)
+
+
+state 29
+
+    (3) classes -> class classes .
+
+    VOID            reduce using rule 3 (classes -> class classes .)
+    INT             reduce using rule 3 (classes -> class classes .)
+    DOUBLE          reduce using rule 3 (classes -> class classes .)
+    STRING          reduce using rule 3 (classes -> class classes .)
+    BOOL            reduce using rule 3 (classes -> class classes .)
+    $end            reduce using rule 3 (classes -> class classes .)
+
+
+state 30
+
+    (4) classes -> empty .
+
+    VOID            reduce using rule 4 (classes -> empty .)
+    INT             reduce using rule 4 (classes -> empty .)
+    DOUBLE          reduce using rule 4 (classes -> empty .)
+    STRING          reduce using rule 4 (classes -> empty .)
+    BOOL            reduce using rule 4 (classes -> empty .)
+    $end            reduce using rule 4 (classes -> empty .)
+
+
+state 31
+
+    (37) instructions -> instruction instructions .
+
+    $end            reduce using rule 37 (instructions -> instruction instructions .)
+    RBRACE          reduce using rule 37 (instructions -> instruction instructions .)
+    RETURN          reduce using rule 37 (instructions -> instruction instructions .)
+
+
+state 32
+
+    (38) instructions -> empty .
+
+    $end            reduce using rule 38 (instructions -> empty .)
+    RBRACE          reduce using rule 38 (instructions -> empty .)
+    RETURN          reduce using rule 38 (instructions -> empty .)
+
+
+state 33
+
+    (6) class -> CLASS ID . LBRACE class_body RBRACE
+
+    LBRACE          shift and go to state 43
+
+
+state 34
+
+    (42) assignment -> ID EQUALS . expression SEMICOLON
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 45
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 35
+
+    (58) instruction -> WHILE LPAREN . expression RPAREN LBRACE instructions RBRACE
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 53
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 36
+
+    (59) instruction -> FOR LPAREN . assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    ID              shift and go to state 8
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    assignment                     shift and go to state 54
+    type                           shift and go to state 14
+
+state 37
+
+    (43) assignment -> type ID . EQUALS expression SEMICOLON
+
+    EQUALS          shift and go to state 55
+
+
+state 38
+
+    (45) print_statement -> PRINT LPAREN . expression RPAREN SEMICOLON
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 56
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 39
+
+    (57) if_else -> IF LPAREN . expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 57
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 40
+
+    (54) functions -> function functions .
+
+    $end            reduce using rule 54 (functions -> function functions .)
+
+
+state 41
+
+    (50) function_with_return -> type ID . LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+
+    LPAREN          shift and go to state 58
+
+
+state 42
+
+    (51) main_function -> VOID MAIN . LPAREN RPAREN LBRACE body RBRACE
+
+    LPAREN          shift and go to state 59
+
+
+state 43
+
+    (6) class -> CLASS ID LBRACE . class_body RBRACE
+    (7) class_body -> . class_member class_body
+    (8) class_body -> . empty
+    (9) class_member -> . class_property
+    (10) class_member -> . method
+    (64) empty -> .
+    (12) class_property -> . type ID SEMICOLON
+    (11) method -> . type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    RBRACE          reduce using rule 64 (empty -> .)
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    class_body                     shift and go to state 60
+    class_member                   shift and go to state 61
+    empty                          shift and go to state 62
+    class_property                 shift and go to state 63
+    method                         shift and go to state 64
+    type                           shift and go to state 65
+
+state 44
+
+    (5) expression -> ID . DOT ID LPAREN RPAREN
+    (35) factor -> ID .
+
+    DOT             shift and go to state 66
+    SEMICOLON       reduce using rule 35 (factor -> ID .)
+    AND             reduce using rule 35 (factor -> ID .)
+    OR              reduce using rule 35 (factor -> ID .)
+    EQEQ            reduce using rule 35 (factor -> ID .)
+    NEQ             reduce using rule 35 (factor -> ID .)
+    MINSIGN         reduce using rule 35 (factor -> ID .)
+    MAXSIGN         reduce using rule 35 (factor -> ID .)
+    MINSIGNEQ       reduce using rule 35 (factor -> ID .)
+    MAXSIGNEQ       reduce using rule 35 (factor -> ID .)
+    PLUS            reduce using rule 35 (factor -> ID .)
+    MINUS           reduce using rule 35 (factor -> ID .)
+    TIMES           reduce using rule 35 (factor -> ID .)
+    DIVIDE          reduce using rule 35 (factor -> ID .)
+    QMARK           reduce using rule 35 (factor -> ID .)
+    RPAREN          reduce using rule 35 (factor -> ID .)
+    COMMA           reduce using rule 35 (factor -> ID .)
+    RBRACKET        reduce using rule 35 (factor -> ID .)
+    COLON           reduce using rule 35 (factor -> ID .)
+
+
+state 45
+
+    (42) assignment -> ID EQUALS expression . SEMICOLON
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    SEMICOLON       shift and go to state 67
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 46
+
+    (36) factor -> LPAREN . expression RPAREN
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 81
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 47
+
+    (26) expression -> NOT . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 82
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 48
+
+    (31) expression -> term .
+
+    SEMICOLON       reduce using rule 31 (expression -> term .)
+    AND             reduce using rule 31 (expression -> term .)
+    OR              reduce using rule 31 (expression -> term .)
+    EQEQ            reduce using rule 31 (expression -> term .)
+    NEQ             reduce using rule 31 (expression -> term .)
+    MINSIGN         reduce using rule 31 (expression -> term .)
+    MAXSIGN         reduce using rule 31 (expression -> term .)
+    MINSIGNEQ       reduce using rule 31 (expression -> term .)
+    MAXSIGNEQ       reduce using rule 31 (expression -> term .)
+    PLUS            reduce using rule 31 (expression -> term .)
+    MINUS           reduce using rule 31 (expression -> term .)
+    TIMES           reduce using rule 31 (expression -> term .)
+    DIVIDE          reduce using rule 31 (expression -> term .)
+    QMARK           reduce using rule 31 (expression -> term .)
+    RPAREN          reduce using rule 31 (expression -> term .)
+    COMMA           reduce using rule 31 (expression -> term .)
+    RBRACKET        reduce using rule 31 (expression -> term .)
+    COLON           reduce using rule 31 (expression -> term .)
+
+
+state 49
+
+    (60) expression -> LBRACKET . expression_list RBRACKET
+    (61) expression_list -> . expression COMMA expression_list
+    (62) expression_list -> . expression
+    (63) expression_list -> . empty
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (64) empty -> .
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    RBRACKET        reduce using rule 64 (empty -> .)
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression_list                shift and go to state 83
+    expression                     shift and go to state 84
+    empty                          shift and go to state 85
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 50
+
+    (32) term -> factor .
+
+    SEMICOLON       reduce using rule 32 (term -> factor .)
+    AND             reduce using rule 32 (term -> factor .)
+    OR              reduce using rule 32 (term -> factor .)
+    EQEQ            reduce using rule 32 (term -> factor .)
+    NEQ             reduce using rule 32 (term -> factor .)
+    MINSIGN         reduce using rule 32 (term -> factor .)
+    MAXSIGN         reduce using rule 32 (term -> factor .)
+    MINSIGNEQ       reduce using rule 32 (term -> factor .)
+    MAXSIGNEQ       reduce using rule 32 (term -> factor .)
+    PLUS            reduce using rule 32 (term -> factor .)
+    MINUS           reduce using rule 32 (term -> factor .)
+    TIMES           reduce using rule 32 (term -> factor .)
+    DIVIDE          reduce using rule 32 (term -> factor .)
+    QMARK           reduce using rule 32 (term -> factor .)
+    RPAREN          reduce using rule 32 (term -> factor .)
+    COMMA           reduce using rule 32 (term -> factor .)
+    RBRACKET        reduce using rule 32 (term -> factor .)
+    COLON           reduce using rule 32 (term -> factor .)
+
+
+state 51
+
+    (33) factor -> NUMBER .
+
+    SEMICOLON       reduce using rule 33 (factor -> NUMBER .)
+    AND             reduce using rule 33 (factor -> NUMBER .)
+    OR              reduce using rule 33 (factor -> NUMBER .)
+    EQEQ            reduce using rule 33 (factor -> NUMBER .)
+    NEQ             reduce using rule 33 (factor -> NUMBER .)
+    MINSIGN         reduce using rule 33 (factor -> NUMBER .)
+    MAXSIGN         reduce using rule 33 (factor -> NUMBER .)
+    MINSIGNEQ       reduce using rule 33 (factor -> NUMBER .)
+    MAXSIGNEQ       reduce using rule 33 (factor -> NUMBER .)
+    PLUS            reduce using rule 33 (factor -> NUMBER .)
+    MINUS           reduce using rule 33 (factor -> NUMBER .)
+    TIMES           reduce using rule 33 (factor -> NUMBER .)
+    DIVIDE          reduce using rule 33 (factor -> NUMBER .)
+    QMARK           reduce using rule 33 (factor -> NUMBER .)
+    RPAREN          reduce using rule 33 (factor -> NUMBER .)
+    COMMA           reduce using rule 33 (factor -> NUMBER .)
+    RBRACKET        reduce using rule 33 (factor -> NUMBER .)
+    COLON           reduce using rule 33 (factor -> NUMBER .)
+
+
+state 52
+
+    (34) factor -> STRING_LITERAL .
+
+    SEMICOLON       reduce using rule 34 (factor -> STRING_LITERAL .)
+    AND             reduce using rule 34 (factor -> STRING_LITERAL .)
+    OR              reduce using rule 34 (factor -> STRING_LITERAL .)
+    EQEQ            reduce using rule 34 (factor -> STRING_LITERAL .)
+    NEQ             reduce using rule 34 (factor -> STRING_LITERAL .)
+    MINSIGN         reduce using rule 34 (factor -> STRING_LITERAL .)
+    MAXSIGN         reduce using rule 34 (factor -> STRING_LITERAL .)
+    MINSIGNEQ       reduce using rule 34 (factor -> STRING_LITERAL .)
+    MAXSIGNEQ       reduce using rule 34 (factor -> STRING_LITERAL .)
+    PLUS            reduce using rule 34 (factor -> STRING_LITERAL .)
+    MINUS           reduce using rule 34 (factor -> STRING_LITERAL .)
+    TIMES           reduce using rule 34 (factor -> STRING_LITERAL .)
+    DIVIDE          reduce using rule 34 (factor -> STRING_LITERAL .)
+    QMARK           reduce using rule 34 (factor -> STRING_LITERAL .)
+    RPAREN          reduce using rule 34 (factor -> STRING_LITERAL .)
+    COMMA           reduce using rule 34 (factor -> STRING_LITERAL .)
+    RBRACKET        reduce using rule 34 (factor -> STRING_LITERAL .)
+    COLON           reduce using rule 34 (factor -> STRING_LITERAL .)
+
+
+state 53
+
+    (58) instruction -> WHILE LPAREN expression . RPAREN LBRACE instructions RBRACE
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    RPAREN          shift and go to state 86
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 54
+
+    (59) instruction -> FOR LPAREN assignment . expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 87
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 55
+
+    (43) assignment -> type ID EQUALS . expression SEMICOLON
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 88
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 56
+
+    (45) print_statement -> PRINT LPAREN expression . RPAREN SEMICOLON
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    RPAREN          shift and go to state 89
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 57
+
+    (57) if_else -> IF LPAREN expression . RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    RPAREN          shift and go to state 90
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 58
+
+    (50) function_with_return -> type ID LPAREN . parameters RPAREN LBRACE body return_statement RBRACE
+    (46) parameters -> . type ID COMMA parameters
+    (47) parameters -> . type ID
+    (48) parameters -> . empty
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+    (64) empty -> .
+
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+    RPAREN          reduce using rule 64 (empty -> .)
+
+    type                           shift and go to state 91
+    parameters                     shift and go to state 92
+    empty                          shift and go to state 93
+
+state 59
+
+    (51) main_function -> VOID MAIN LPAREN . RPAREN LBRACE body RBRACE
+
+    RPAREN          shift and go to state 94
+
+
+state 60
+
+    (6) class -> CLASS ID LBRACE class_body . RBRACE
+
+    RBRACE          shift and go to state 95
+
+
+state 61
+
+    (7) class_body -> class_member . class_body
+    (7) class_body -> . class_member class_body
+    (8) class_body -> . empty
+    (9) class_member -> . class_property
+    (10) class_member -> . method
+    (64) empty -> .
+    (12) class_property -> . type ID SEMICOLON
+    (11) method -> . type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    RBRACE          reduce using rule 64 (empty -> .)
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    class_member                   shift and go to state 61
+    class_body                     shift and go to state 96
+    empty                          shift and go to state 62
+    class_property                 shift and go to state 63
+    method                         shift and go to state 64
+    type                           shift and go to state 65
+
+state 62
+
+    (8) class_body -> empty .
+
+    RBRACE          reduce using rule 8 (class_body -> empty .)
+
+
+state 63
+
+    (9) class_member -> class_property .
+
+    INT             reduce using rule 9 (class_member -> class_property .)
+    DOUBLE          reduce using rule 9 (class_member -> class_property .)
+    STRING          reduce using rule 9 (class_member -> class_property .)
+    BOOL            reduce using rule 9 (class_member -> class_property .)
+    VOID            reduce using rule 9 (class_member -> class_property .)
+    RBRACE          reduce using rule 9 (class_member -> class_property .)
+
+
+state 64
+
+    (10) class_member -> method .
+
+    INT             reduce using rule 10 (class_member -> method .)
+    DOUBLE          reduce using rule 10 (class_member -> method .)
+    STRING          reduce using rule 10 (class_member -> method .)
+    BOOL            reduce using rule 10 (class_member -> method .)
+    VOID            reduce using rule 10 (class_member -> method .)
+    RBRACE          reduce using rule 10 (class_member -> method .)
+
+
+state 65
+
+    (12) class_property -> type . ID SEMICOLON
+    (11) method -> type . ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+
+    ID              shift and go to state 97
+
+
+state 66
+
+    (5) expression -> ID DOT . ID LPAREN RPAREN
+
+    ID              shift and go to state 98
+
+
+state 67
+
+    (42) assignment -> ID EQUALS expression SEMICOLON .
+
+    WHILE           reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    FOR             reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    ID              reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    PRINT           reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    IF              reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    INT             reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    DOUBLE          reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    STRING          reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    BOOL            reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    VOID            reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    $end            reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    RBRACE          reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    RETURN          reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    NOT             reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    LBRACKET        reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    NUMBER          reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    STRING_LITERAL  reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    LPAREN          reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+    RPAREN          reduce using rule 42 (assignment -> ID EQUALS expression SEMICOLON .)
+
+
+state 68
+
+    (18) expression -> expression AND . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 99
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 69
+
+    (19) expression -> expression OR . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 100
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 70
+
+    (20) expression -> expression EQEQ . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 101
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 71
+
+    (21) expression -> expression NEQ . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 102
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 72
+
+    (22) expression -> expression MINSIGN . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 103
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 73
+
+    (23) expression -> expression MAXSIGN . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 104
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 74
+
+    (24) expression -> expression MINSIGNEQ . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 105
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 75
+
+    (25) expression -> expression MAXSIGNEQ . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 106
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 76
+
+    (27) expression -> expression PLUS . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 107
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 77
+
+    (28) expression -> expression MINUS . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 108
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 78
+
+    (29) expression -> expression TIMES . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 109
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 79
+
+    (30) expression -> expression DIVIDE . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 110
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 80
+
+    (44) expression -> expression QMARK . expression COLON expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 111
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 81
+
+    (36) factor -> LPAREN expression . RPAREN
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    RPAREN          shift and go to state 112
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 82
+
+    (26) expression -> NOT expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 26 (expression -> NOT expression .)
+    RPAREN          reduce using rule 26 (expression -> NOT expression .)
+    COMMA           reduce using rule 26 (expression -> NOT expression .)
+    RBRACKET        reduce using rule 26 (expression -> NOT expression .)
+    COLON           reduce using rule 26 (expression -> NOT expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! OR              [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! EQEQ            [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! NEQ             [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! MINSIGN         [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! MAXSIGN         [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! PLUS            [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! MINUS           [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! TIMES           [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! DIVIDE          [ reduce using rule 26 (expression -> NOT expression .) ]
+  ! QMARK           [ reduce using rule 26 (expression -> NOT expression .) ]
+
+
+state 83
+
+    (60) expression -> LBRACKET expression_list . RBRACKET
+
+    RBRACKET        shift and go to state 113
+
+
+state 84
+
+    (61) expression_list -> expression . COMMA expression_list
+    (62) expression_list -> expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    COMMA           shift and go to state 114
+    RBRACKET        reduce using rule 62 (expression_list -> expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 85
+
+    (63) expression_list -> empty .
+
+    RBRACKET        reduce using rule 63 (expression_list -> empty .)
+
+
+state 86
+
+    (58) instruction -> WHILE LPAREN expression RPAREN . LBRACE instructions RBRACE
+
+    LBRACE          shift and go to state 115
+
+
+state 87
+
+    (59) instruction -> FOR LPAREN assignment expression . SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    SEMICOLON       shift and go to state 116
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 88
+
+    (43) assignment -> type ID EQUALS expression . SEMICOLON
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    SEMICOLON       shift and go to state 117
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 89
+
+    (45) print_statement -> PRINT LPAREN expression RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 118
+
+
+state 90
+
+    (57) if_else -> IF LPAREN expression RPAREN . LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+
+    LBRACE          shift and go to state 119
+
+
+state 91
+
+    (46) parameters -> type . ID COMMA parameters
+    (47) parameters -> type . ID
+
+    ID              shift and go to state 120
+
+
+state 92
+
+    (50) function_with_return -> type ID LPAREN parameters . RPAREN LBRACE body return_statement RBRACE
+
+    RPAREN          shift and go to state 121
+
+
+state 93
+
+    (48) parameters -> empty .
+
+    RPAREN          reduce using rule 48 (parameters -> empty .)
+
+
+state 94
+
+    (51) main_function -> VOID MAIN LPAREN RPAREN . LBRACE body RBRACE
+
+    LBRACE          shift and go to state 122
+
+
+state 95
+
+    (6) class -> CLASS ID LBRACE class_body RBRACE .
+
+    CLASS           reduce using rule 6 (class -> CLASS ID LBRACE class_body RBRACE .)
+    VOID            reduce using rule 6 (class -> CLASS ID LBRACE class_body RBRACE .)
+    INT             reduce using rule 6 (class -> CLASS ID LBRACE class_body RBRACE .)
+    DOUBLE          reduce using rule 6 (class -> CLASS ID LBRACE class_body RBRACE .)
+    STRING          reduce using rule 6 (class -> CLASS ID LBRACE class_body RBRACE .)
+    BOOL            reduce using rule 6 (class -> CLASS ID LBRACE class_body RBRACE .)
+    $end            reduce using rule 6 (class -> CLASS ID LBRACE class_body RBRACE .)
+
+
+state 96
+
+    (7) class_body -> class_member class_body .
+
+    RBRACE          reduce using rule 7 (class_body -> class_member class_body .)
+
+
+state 97
+
+    (12) class_property -> type ID . SEMICOLON
+    (11) method -> type ID . LPAREN parameters RPAREN LBRACE body return_statement RBRACE
+
+    SEMICOLON       shift and go to state 123
+    LPAREN          shift and go to state 124
+
+
+state 98
+
+    (5) expression -> ID DOT ID . LPAREN RPAREN
+
+    LPAREN          shift and go to state 125
+
+
+state 99
+
+    (18) expression -> expression AND expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 18 (expression -> expression AND expression .)
+    RPAREN          reduce using rule 18 (expression -> expression AND expression .)
+    COMMA           reduce using rule 18 (expression -> expression AND expression .)
+    RBRACKET        reduce using rule 18 (expression -> expression AND expression .)
+    COLON           reduce using rule 18 (expression -> expression AND expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! OR              [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! EQEQ            [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! NEQ             [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! MINSIGN         [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! MAXSIGN         [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! PLUS            [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! MINUS           [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! TIMES           [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! DIVIDE          [ reduce using rule 18 (expression -> expression AND expression .) ]
+  ! QMARK           [ reduce using rule 18 (expression -> expression AND expression .) ]
+
+
+state 100
+
+    (19) expression -> expression OR expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 19 (expression -> expression OR expression .)
+    RPAREN          reduce using rule 19 (expression -> expression OR expression .)
+    COMMA           reduce using rule 19 (expression -> expression OR expression .)
+    RBRACKET        reduce using rule 19 (expression -> expression OR expression .)
+    COLON           reduce using rule 19 (expression -> expression OR expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! OR              [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! EQEQ            [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! NEQ             [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! MINSIGN         [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! MAXSIGN         [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! PLUS            [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! MINUS           [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! TIMES           [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! DIVIDE          [ reduce using rule 19 (expression -> expression OR expression .) ]
+  ! QMARK           [ reduce using rule 19 (expression -> expression OR expression .) ]
+
+
+state 101
+
+    (20) expression -> expression EQEQ expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 20 (expression -> expression EQEQ expression .)
+    RPAREN          reduce using rule 20 (expression -> expression EQEQ expression .)
+    COMMA           reduce using rule 20 (expression -> expression EQEQ expression .)
+    RBRACKET        reduce using rule 20 (expression -> expression EQEQ expression .)
+    COLON           reduce using rule 20 (expression -> expression EQEQ expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! OR              [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! EQEQ            [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! NEQ             [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! MINSIGN         [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! MAXSIGN         [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! PLUS            [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! MINUS           [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! TIMES           [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! DIVIDE          [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+  ! QMARK           [ reduce using rule 20 (expression -> expression EQEQ expression .) ]
+
+
+state 102
+
+    (21) expression -> expression NEQ expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 21 (expression -> expression NEQ expression .)
+    RPAREN          reduce using rule 21 (expression -> expression NEQ expression .)
+    COMMA           reduce using rule 21 (expression -> expression NEQ expression .)
+    RBRACKET        reduce using rule 21 (expression -> expression NEQ expression .)
+    COLON           reduce using rule 21 (expression -> expression NEQ expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! OR              [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! EQEQ            [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! NEQ             [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! MINSIGN         [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! MAXSIGN         [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! PLUS            [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! MINUS           [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! TIMES           [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! DIVIDE          [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+  ! QMARK           [ reduce using rule 21 (expression -> expression NEQ expression .) ]
+
+
+state 103
+
+    (22) expression -> expression MINSIGN expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 22 (expression -> expression MINSIGN expression .)
+    RPAREN          reduce using rule 22 (expression -> expression MINSIGN expression .)
+    COMMA           reduce using rule 22 (expression -> expression MINSIGN expression .)
+    RBRACKET        reduce using rule 22 (expression -> expression MINSIGN expression .)
+    COLON           reduce using rule 22 (expression -> expression MINSIGN expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! OR              [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! EQEQ            [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! NEQ             [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! MINSIGN         [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! MAXSIGN         [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! PLUS            [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! MINUS           [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! TIMES           [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! DIVIDE          [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+  ! QMARK           [ reduce using rule 22 (expression -> expression MINSIGN expression .) ]
+
+
+state 104
+
+    (23) expression -> expression MAXSIGN expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 23 (expression -> expression MAXSIGN expression .)
+    RPAREN          reduce using rule 23 (expression -> expression MAXSIGN expression .)
+    COMMA           reduce using rule 23 (expression -> expression MAXSIGN expression .)
+    RBRACKET        reduce using rule 23 (expression -> expression MAXSIGN expression .)
+    COLON           reduce using rule 23 (expression -> expression MAXSIGN expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! OR              [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! EQEQ            [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! NEQ             [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! MINSIGN         [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! MAXSIGN         [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! PLUS            [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! MINUS           [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! TIMES           [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! DIVIDE          [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+  ! QMARK           [ reduce using rule 23 (expression -> expression MAXSIGN expression .) ]
+
+
+state 105
+
+    (24) expression -> expression MINSIGNEQ expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 24 (expression -> expression MINSIGNEQ expression .)
+    RPAREN          reduce using rule 24 (expression -> expression MINSIGNEQ expression .)
+    COMMA           reduce using rule 24 (expression -> expression MINSIGNEQ expression .)
+    RBRACKET        reduce using rule 24 (expression -> expression MINSIGNEQ expression .)
+    COLON           reduce using rule 24 (expression -> expression MINSIGNEQ expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! OR              [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! EQEQ            [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! NEQ             [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! MINSIGN         [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! MAXSIGN         [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! PLUS            [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! MINUS           [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! TIMES           [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! DIVIDE          [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+  ! QMARK           [ reduce using rule 24 (expression -> expression MINSIGNEQ expression .) ]
+
+
+state 106
+
+    (25) expression -> expression MAXSIGNEQ expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 25 (expression -> expression MAXSIGNEQ expression .)
+    RPAREN          reduce using rule 25 (expression -> expression MAXSIGNEQ expression .)
+    COMMA           reduce using rule 25 (expression -> expression MAXSIGNEQ expression .)
+    RBRACKET        reduce using rule 25 (expression -> expression MAXSIGNEQ expression .)
+    COLON           reduce using rule 25 (expression -> expression MAXSIGNEQ expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! OR              [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! EQEQ            [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! NEQ             [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! MINSIGN         [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! MAXSIGN         [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! PLUS            [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! MINUS           [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! TIMES           [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! DIVIDE          [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+  ! QMARK           [ reduce using rule 25 (expression -> expression MAXSIGNEQ expression .) ]
+
+
+state 107
+
+    (27) expression -> expression PLUS expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    SEMICOLON       reduce using rule 27 (expression -> expression PLUS expression .)
+    AND             reduce using rule 27 (expression -> expression PLUS expression .)
+    OR              reduce using rule 27 (expression -> expression PLUS expression .)
+    EQEQ            reduce using rule 27 (expression -> expression PLUS expression .)
+    NEQ             reduce using rule 27 (expression -> expression PLUS expression .)
+    MINSIGN         reduce using rule 27 (expression -> expression PLUS expression .)
+    MAXSIGN         reduce using rule 27 (expression -> expression PLUS expression .)
+    MINSIGNEQ       reduce using rule 27 (expression -> expression PLUS expression .)
+    MAXSIGNEQ       reduce using rule 27 (expression -> expression PLUS expression .)
+    PLUS            reduce using rule 27 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 27 (expression -> expression PLUS expression .)
+    QMARK           reduce using rule 27 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 27 (expression -> expression PLUS expression .)
+    COMMA           reduce using rule 27 (expression -> expression PLUS expression .)
+    RBRACKET        reduce using rule 27 (expression -> expression PLUS expression .)
+    COLON           reduce using rule 27 (expression -> expression PLUS expression .)
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+
+  ! TIMES           [ reduce using rule 27 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 27 (expression -> expression PLUS expression .) ]
+  ! AND             [ shift and go to state 68 ]
+  ! OR              [ shift and go to state 69 ]
+  ! EQEQ            [ shift and go to state 70 ]
+  ! NEQ             [ shift and go to state 71 ]
+  ! MINSIGN         [ shift and go to state 72 ]
+  ! MAXSIGN         [ shift and go to state 73 ]
+  ! MINSIGNEQ       [ shift and go to state 74 ]
+  ! MAXSIGNEQ       [ shift and go to state 75 ]
+  ! PLUS            [ shift and go to state 76 ]
+  ! MINUS           [ shift and go to state 77 ]
+  ! QMARK           [ shift and go to state 80 ]
+
+
+state 108
+
+    (28) expression -> expression MINUS expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    SEMICOLON       reduce using rule 28 (expression -> expression MINUS expression .)
+    AND             reduce using rule 28 (expression -> expression MINUS expression .)
+    OR              reduce using rule 28 (expression -> expression MINUS expression .)
+    EQEQ            reduce using rule 28 (expression -> expression MINUS expression .)
+    NEQ             reduce using rule 28 (expression -> expression MINUS expression .)
+    MINSIGN         reduce using rule 28 (expression -> expression MINUS expression .)
+    MAXSIGN         reduce using rule 28 (expression -> expression MINUS expression .)
+    MINSIGNEQ       reduce using rule 28 (expression -> expression MINUS expression .)
+    MAXSIGNEQ       reduce using rule 28 (expression -> expression MINUS expression .)
+    PLUS            reduce using rule 28 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 28 (expression -> expression MINUS expression .)
+    QMARK           reduce using rule 28 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 28 (expression -> expression MINUS expression .)
+    COMMA           reduce using rule 28 (expression -> expression MINUS expression .)
+    RBRACKET        reduce using rule 28 (expression -> expression MINUS expression .)
+    COLON           reduce using rule 28 (expression -> expression MINUS expression .)
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+
+  ! TIMES           [ reduce using rule 28 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 28 (expression -> expression MINUS expression .) ]
+  ! AND             [ shift and go to state 68 ]
+  ! OR              [ shift and go to state 69 ]
+  ! EQEQ            [ shift and go to state 70 ]
+  ! NEQ             [ shift and go to state 71 ]
+  ! MINSIGN         [ shift and go to state 72 ]
+  ! MAXSIGN         [ shift and go to state 73 ]
+  ! MINSIGNEQ       [ shift and go to state 74 ]
+  ! MAXSIGNEQ       [ shift and go to state 75 ]
+  ! PLUS            [ shift and go to state 76 ]
+  ! MINUS           [ shift and go to state 77 ]
+  ! QMARK           [ shift and go to state 80 ]
+
+
+state 109
+
+    (29) expression -> expression TIMES expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    SEMICOLON       reduce using rule 29 (expression -> expression TIMES expression .)
+    AND             reduce using rule 29 (expression -> expression TIMES expression .)
+    OR              reduce using rule 29 (expression -> expression TIMES expression .)
+    EQEQ            reduce using rule 29 (expression -> expression TIMES expression .)
+    NEQ             reduce using rule 29 (expression -> expression TIMES expression .)
+    MINSIGN         reduce using rule 29 (expression -> expression TIMES expression .)
+    MAXSIGN         reduce using rule 29 (expression -> expression TIMES expression .)
+    MINSIGNEQ       reduce using rule 29 (expression -> expression TIMES expression .)
+    MAXSIGNEQ       reduce using rule 29 (expression -> expression TIMES expression .)
+    PLUS            reduce using rule 29 (expression -> expression TIMES expression .)
+    MINUS           reduce using rule 29 (expression -> expression TIMES expression .)
+    TIMES           reduce using rule 29 (expression -> expression TIMES expression .)
+    DIVIDE          reduce using rule 29 (expression -> expression TIMES expression .)
+    QMARK           reduce using rule 29 (expression -> expression TIMES expression .)
+    RPAREN          reduce using rule 29 (expression -> expression TIMES expression .)
+    COMMA           reduce using rule 29 (expression -> expression TIMES expression .)
+    RBRACKET        reduce using rule 29 (expression -> expression TIMES expression .)
+    COLON           reduce using rule 29 (expression -> expression TIMES expression .)
+
+  ! AND             [ shift and go to state 68 ]
+  ! OR              [ shift and go to state 69 ]
+  ! EQEQ            [ shift and go to state 70 ]
+  ! NEQ             [ shift and go to state 71 ]
+  ! MINSIGN         [ shift and go to state 72 ]
+  ! MAXSIGN         [ shift and go to state 73 ]
+  ! MINSIGNEQ       [ shift and go to state 74 ]
+  ! MAXSIGNEQ       [ shift and go to state 75 ]
+  ! PLUS            [ shift and go to state 76 ]
+  ! MINUS           [ shift and go to state 77 ]
+  ! TIMES           [ shift and go to state 78 ]
+  ! DIVIDE          [ shift and go to state 79 ]
+  ! QMARK           [ shift and go to state 80 ]
+
+
+state 110
+
+    (30) expression -> expression DIVIDE expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    SEMICOLON       reduce using rule 30 (expression -> expression DIVIDE expression .)
+    AND             reduce using rule 30 (expression -> expression DIVIDE expression .)
+    OR              reduce using rule 30 (expression -> expression DIVIDE expression .)
+    EQEQ            reduce using rule 30 (expression -> expression DIVIDE expression .)
+    NEQ             reduce using rule 30 (expression -> expression DIVIDE expression .)
+    MINSIGN         reduce using rule 30 (expression -> expression DIVIDE expression .)
+    MAXSIGN         reduce using rule 30 (expression -> expression DIVIDE expression .)
+    MINSIGNEQ       reduce using rule 30 (expression -> expression DIVIDE expression .)
+    MAXSIGNEQ       reduce using rule 30 (expression -> expression DIVIDE expression .)
+    PLUS            reduce using rule 30 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 30 (expression -> expression DIVIDE expression .)
+    TIMES           reduce using rule 30 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 30 (expression -> expression DIVIDE expression .)
+    QMARK           reduce using rule 30 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 30 (expression -> expression DIVIDE expression .)
+    COMMA           reduce using rule 30 (expression -> expression DIVIDE expression .)
+    RBRACKET        reduce using rule 30 (expression -> expression DIVIDE expression .)
+    COLON           reduce using rule 30 (expression -> expression DIVIDE expression .)
+
+  ! AND             [ shift and go to state 68 ]
+  ! OR              [ shift and go to state 69 ]
+  ! EQEQ            [ shift and go to state 70 ]
+  ! NEQ             [ shift and go to state 71 ]
+  ! MINSIGN         [ shift and go to state 72 ]
+  ! MAXSIGN         [ shift and go to state 73 ]
+  ! MINSIGNEQ       [ shift and go to state 74 ]
+  ! MAXSIGNEQ       [ shift and go to state 75 ]
+  ! PLUS            [ shift and go to state 76 ]
+  ! MINUS           [ shift and go to state 77 ]
+  ! TIMES           [ shift and go to state 78 ]
+  ! DIVIDE          [ shift and go to state 79 ]
+  ! QMARK           [ shift and go to state 80 ]
+
+
+state 111
+
+    (44) expression -> expression QMARK expression . COLON expression
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    COLON           shift and go to state 126
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 112
+
+    (36) factor -> LPAREN expression RPAREN .
+
+    SEMICOLON       reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    AND             reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    OR              reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    EQEQ            reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    NEQ             reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    MINSIGN         reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    MAXSIGN         reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    MINSIGNEQ       reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    MAXSIGNEQ       reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    QMARK           reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    RBRACKET        reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+    COLON           reduce using rule 36 (factor -> LPAREN expression RPAREN .)
+
+
+state 113
+
+    (60) expression -> LBRACKET expression_list RBRACKET .
+
+    SEMICOLON       reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    AND             reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    OR              reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    EQEQ            reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    NEQ             reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    MINSIGN         reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    MAXSIGN         reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    MINSIGNEQ       reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    MAXSIGNEQ       reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    PLUS            reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    MINUS           reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    TIMES           reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    DIVIDE          reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    QMARK           reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    RPAREN          reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    COMMA           reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    RBRACKET        reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+    COLON           reduce using rule 60 (expression -> LBRACKET expression_list RBRACKET .)
+
+
+state 114
+
+    (61) expression_list -> expression COMMA . expression_list
+    (61) expression_list -> . expression COMMA expression_list
+    (62) expression_list -> . expression
+    (63) expression_list -> . empty
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (64) empty -> .
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    RBRACKET        reduce using rule 64 (empty -> .)
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 84
+    expression_list                shift and go to state 127
+    empty                          shift and go to state 85
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 115
+
+    (58) instruction -> WHILE LPAREN expression RPAREN LBRACE . instructions RBRACE
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (64) empty -> .
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    RBRACE          reduce using rule 64 (empty -> .)
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    instructions                   shift and go to state 128
+    instruction                    shift and go to state 6
+    empty                          shift and go to state 32
+    assignment                     shift and go to state 9
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+    type                           shift and go to state 14
+
+state 116
+
+    (59) instruction -> FOR LPAREN assignment expression SEMICOLON . assignment RPAREN LBRACE instructions RBRACE
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    ID              shift and go to state 8
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    assignment                     shift and go to state 129
+    type                           shift and go to state 14
+
+state 117
+
+    (43) assignment -> type ID EQUALS expression SEMICOLON .
+
+    WHILE           reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    FOR             reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    ID              reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    PRINT           reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    IF              reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    INT             reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    DOUBLE          reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    STRING          reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    BOOL            reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    VOID            reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    $end            reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    RBRACE          reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    RETURN          reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    NOT             reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    LBRACKET        reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    NUMBER          reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    STRING_LITERAL  reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    LPAREN          reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+    RPAREN          reduce using rule 43 (assignment -> type ID EQUALS expression SEMICOLON .)
+
+
+state 118
+
+    (45) print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .
+
+    WHILE           reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    FOR             reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    ID              reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    PRINT           reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    IF              reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    INT             reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    DOUBLE          reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    STRING          reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    BOOL            reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    VOID            reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    $end            reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    RBRACE          reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+    RETURN          reduce using rule 45 (print_statement -> PRINT LPAREN expression RPAREN SEMICOLON .)
+
+
+state 119
+
+    (57) if_else -> IF LPAREN expression RPAREN LBRACE . instructions RBRACE ELSE LBRACE instructions RBRACE
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (64) empty -> .
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    RBRACE          reduce using rule 64 (empty -> .)
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    instructions                   shift and go to state 130
+    instruction                    shift and go to state 6
+    empty                          shift and go to state 32
+    assignment                     shift and go to state 9
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+    type                           shift and go to state 14
+
+state 120
+
+    (46) parameters -> type ID . COMMA parameters
+    (47) parameters -> type ID .
+
+    COMMA           shift and go to state 131
+    RPAREN          reduce using rule 47 (parameters -> type ID .)
+
+
+state 121
+
+    (50) function_with_return -> type ID LPAREN parameters RPAREN . LBRACE body return_statement RBRACE
+
+    LBRACE          shift and go to state 132
+
+
+state 122
+
+    (51) main_function -> VOID MAIN LPAREN RPAREN LBRACE . body RBRACE
+    (56) body -> . instructions
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (64) empty -> .
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    RBRACE          reduce using rule 64 (empty -> .)
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    body                           shift and go to state 133
+    instructions                   shift and go to state 134
+    instruction                    shift and go to state 6
+    empty                          shift and go to state 32
+    assignment                     shift and go to state 9
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+    type                           shift and go to state 14
+
+state 123
+
+    (12) class_property -> type ID SEMICOLON .
+
+    INT             reduce using rule 12 (class_property -> type ID SEMICOLON .)
+    DOUBLE          reduce using rule 12 (class_property -> type ID SEMICOLON .)
+    STRING          reduce using rule 12 (class_property -> type ID SEMICOLON .)
+    BOOL            reduce using rule 12 (class_property -> type ID SEMICOLON .)
+    VOID            reduce using rule 12 (class_property -> type ID SEMICOLON .)
+    RBRACE          reduce using rule 12 (class_property -> type ID SEMICOLON .)
+
+
+state 124
+
+    (11) method -> type ID LPAREN . parameters RPAREN LBRACE body return_statement RBRACE
+    (46) parameters -> . type ID COMMA parameters
+    (47) parameters -> . type ID
+    (48) parameters -> . empty
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+    (64) empty -> .
+
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+    RPAREN          reduce using rule 64 (empty -> .)
+
+    type                           shift and go to state 91
+    parameters                     shift and go to state 135
+    empty                          shift and go to state 93
+
+state 125
+
+    (5) expression -> ID DOT ID LPAREN . RPAREN
+
+    RPAREN          shift and go to state 136
+
+
+state 126
+
+    (44) expression -> expression QMARK expression COLON . expression
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 137
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 127
+
+    (61) expression_list -> expression COMMA expression_list .
+
+    RBRACKET        reduce using rule 61 (expression_list -> expression COMMA expression_list .)
+
+
+state 128
+
+    (58) instruction -> WHILE LPAREN expression RPAREN LBRACE instructions . RBRACE
+
+    RBRACE          shift and go to state 138
+
+
+state 129
+
+    (59) instruction -> FOR LPAREN assignment expression SEMICOLON assignment . RPAREN LBRACE instructions RBRACE
+
+    RPAREN          shift and go to state 139
+
+
+state 130
+
+    (57) if_else -> IF LPAREN expression RPAREN LBRACE instructions . RBRACE ELSE LBRACE instructions RBRACE
+
+    RBRACE          shift and go to state 140
+
+
+state 131
+
+    (46) parameters -> type ID COMMA . parameters
+    (46) parameters -> . type ID COMMA parameters
+    (47) parameters -> . type ID
+    (48) parameters -> . empty
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+    (64) empty -> .
+
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+    RPAREN          reduce using rule 64 (empty -> .)
+
+    type                           shift and go to state 91
+    parameters                     shift and go to state 141
+    empty                          shift and go to state 93
+
+state 132
+
+    (50) function_with_return -> type ID LPAREN parameters RPAREN LBRACE . body return_statement RBRACE
+    (56) body -> . instructions
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (64) empty -> .
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    RETURN          reduce using rule 64 (empty -> .)
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    type                           shift and go to state 14
+    body                           shift and go to state 142
+    instructions                   shift and go to state 134
+    instruction                    shift and go to state 6
+    empty                          shift and go to state 32
+    assignment                     shift and go to state 9
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+
+state 133
+
+    (51) main_function -> VOID MAIN LPAREN RPAREN LBRACE body . RBRACE
+
+    RBRACE          shift and go to state 143
+
+
+state 134
+
+    (56) body -> instructions .
+
+    RBRACE          reduce using rule 56 (body -> instructions .)
+    RETURN          reduce using rule 56 (body -> instructions .)
+
+
+state 135
+
+    (11) method -> type ID LPAREN parameters . RPAREN LBRACE body return_statement RBRACE
+
+    RPAREN          shift and go to state 144
+
+
+state 136
+
+    (5) expression -> ID DOT ID LPAREN RPAREN .
+
+    SEMICOLON       reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    AND             reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    OR              reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    EQEQ            reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    NEQ             reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    MINSIGN         reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    MAXSIGN         reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    MINSIGNEQ       reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    MAXSIGNEQ       reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    PLUS            reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    MINUS           reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    TIMES           reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    DIVIDE          reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    QMARK           reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    RPAREN          reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    COMMA           reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    RBRACKET        reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+    COLON           reduce using rule 5 (expression -> ID DOT ID LPAREN RPAREN .)
+
+
+state 137
+
+    (44) expression -> expression QMARK expression COLON expression .
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+  ! shift/reduce conflict for MINSIGN resolved as shift
+  ! shift/reduce conflict for MAXSIGN resolved as shift
+  ! shift/reduce conflict for MINSIGNEQ resolved as shift
+  ! shift/reduce conflict for MAXSIGNEQ resolved as shift
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for QMARK resolved as shift
+    SEMICOLON       reduce using rule 44 (expression -> expression QMARK expression COLON expression .)
+    RPAREN          reduce using rule 44 (expression -> expression QMARK expression COLON expression .)
+    COMMA           reduce using rule 44 (expression -> expression QMARK expression COLON expression .)
+    RBRACKET        reduce using rule 44 (expression -> expression QMARK expression COLON expression .)
+    COLON           reduce using rule 44 (expression -> expression QMARK expression COLON expression .)
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+  ! AND             [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! OR              [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! EQEQ            [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! NEQ             [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! MINSIGN         [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! MAXSIGN         [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! MINSIGNEQ       [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! MAXSIGNEQ       [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! PLUS            [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! MINUS           [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! TIMES           [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! DIVIDE          [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+  ! QMARK           [ reduce using rule 44 (expression -> expression QMARK expression COLON expression .) ]
+
+
+state 138
+
+    (58) instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .
+
+    WHILE           reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    FOR             reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    ID              reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    PRINT           reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    IF              reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    INT             reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    DOUBLE          reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    STRING          reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    BOOL            reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    VOID            reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    $end            reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    RBRACE          reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+    RETURN          reduce using rule 58 (instruction -> WHILE LPAREN expression RPAREN LBRACE instructions RBRACE .)
+
+
+state 139
+
+    (59) instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN . LBRACE instructions RBRACE
+
+    LBRACE          shift and go to state 145
+
+
+state 140
+
+    (57) if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE . ELSE LBRACE instructions RBRACE
+
+    ELSE            shift and go to state 146
+
+
+state 141
+
+    (46) parameters -> type ID COMMA parameters .
+
+    RPAREN          reduce using rule 46 (parameters -> type ID COMMA parameters .)
+
+
+state 142
+
+    (50) function_with_return -> type ID LPAREN parameters RPAREN LBRACE body . return_statement RBRACE
+    (49) return_statement -> . RETURN expression SEMICOLON
+
+    RETURN          shift and go to state 148
+
+    return_statement               shift and go to state 147
+
+state 143
+
+    (51) main_function -> VOID MAIN LPAREN RPAREN LBRACE body RBRACE .
+
+    VOID            reduce using rule 51 (main_function -> VOID MAIN LPAREN RPAREN LBRACE body RBRACE .)
+    INT             reduce using rule 51 (main_function -> VOID MAIN LPAREN RPAREN LBRACE body RBRACE .)
+    DOUBLE          reduce using rule 51 (main_function -> VOID MAIN LPAREN RPAREN LBRACE body RBRACE .)
+    STRING          reduce using rule 51 (main_function -> VOID MAIN LPAREN RPAREN LBRACE body RBRACE .)
+    BOOL            reduce using rule 51 (main_function -> VOID MAIN LPAREN RPAREN LBRACE body RBRACE .)
+    $end            reduce using rule 51 (main_function -> VOID MAIN LPAREN RPAREN LBRACE body RBRACE .)
+
+
+state 144
+
+    (11) method -> type ID LPAREN parameters RPAREN . LBRACE body return_statement RBRACE
+
+    LBRACE          shift and go to state 149
+
+
+state 145
+
+    (59) instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE . instructions RBRACE
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (64) empty -> .
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    RBRACE          reduce using rule 64 (empty -> .)
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    assignment                     shift and go to state 9
+    instructions                   shift and go to state 150
+    instruction                    shift and go to state 6
+    empty                          shift and go to state 32
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+    type                           shift and go to state 14
+
+state 146
+
+    (57) if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE . LBRACE instructions RBRACE
+
+    LBRACE          shift and go to state 151
+
+
+state 147
+
+    (50) function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement . RBRACE
+
+    RBRACE          shift and go to state 152
+
+
+state 148
+
+    (49) return_statement -> RETURN . expression SEMICOLON
+    (5) expression -> . ID DOT ID LPAREN RPAREN
+    (18) expression -> . expression AND expression
+    (19) expression -> . expression OR expression
+    (20) expression -> . expression EQEQ expression
+    (21) expression -> . expression NEQ expression
+    (22) expression -> . expression MINSIGN expression
+    (23) expression -> . expression MAXSIGN expression
+    (24) expression -> . expression MINSIGNEQ expression
+    (25) expression -> . expression MAXSIGNEQ expression
+    (26) expression -> . NOT expression
+    (27) expression -> . expression PLUS expression
+    (28) expression -> . expression MINUS expression
+    (29) expression -> . expression TIMES expression
+    (30) expression -> . expression DIVIDE expression
+    (31) expression -> . term
+    (44) expression -> . expression QMARK expression COLON expression
+    (60) expression -> . LBRACKET expression_list RBRACKET
+    (32) term -> . factor
+    (33) factor -> . NUMBER
+    (34) factor -> . STRING_LITERAL
+    (35) factor -> . ID
+    (36) factor -> . LPAREN expression RPAREN
+
+    ID              shift and go to state 44
+    NOT             shift and go to state 47
+    LBRACKET        shift and go to state 49
+    NUMBER          shift and go to state 51
+    STRING_LITERAL  shift and go to state 52
+    LPAREN          shift and go to state 46
+
+    expression                     shift and go to state 153
+    term                           shift and go to state 48
+    factor                         shift and go to state 50
+
+state 149
+
+    (11) method -> type ID LPAREN parameters RPAREN LBRACE . body return_statement RBRACE
+    (56) body -> . instructions
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (64) empty -> .
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    RETURN          reduce using rule 64 (empty -> .)
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    type                           shift and go to state 14
+    body                           shift and go to state 154
+    instructions                   shift and go to state 134
+    instruction                    shift and go to state 6
+    empty                          shift and go to state 32
+    assignment                     shift and go to state 9
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+
+state 150
+
+    (59) instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions . RBRACE
+
+    RBRACE          shift and go to state 155
+
+
+state 151
+
+    (57) if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE . instructions RBRACE
+    (37) instructions -> . instruction instructions
+    (38) instructions -> . empty
+    (39) instruction -> . assignment
+    (40) instruction -> . print_statement
+    (41) instruction -> . if_else
+    (58) instruction -> . WHILE LPAREN expression RPAREN LBRACE instructions RBRACE
+    (59) instruction -> . FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE
+    (64) empty -> .
+    (42) assignment -> . ID EQUALS expression SEMICOLON
+    (43) assignment -> . type ID EQUALS expression SEMICOLON
+    (45) print_statement -> . PRINT LPAREN expression RPAREN SEMICOLON
+    (57) if_else -> . IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE
+    (13) type -> . INT
+    (14) type -> . DOUBLE
+    (15) type -> . STRING
+    (16) type -> . BOOL
+    (17) type -> . VOID
+
+    WHILE           shift and go to state 12
+    FOR             shift and go to state 13
+    RBRACE          reduce using rule 64 (empty -> .)
+    ID              shift and go to state 8
+    PRINT           shift and go to state 15
+    IF              shift and go to state 16
+    INT             shift and go to state 17
+    DOUBLE          shift and go to state 18
+    STRING          shift and go to state 19
+    BOOL            shift and go to state 20
+    VOID            shift and go to state 21
+
+    instructions                   shift and go to state 156
+    instruction                    shift and go to state 6
+    empty                          shift and go to state 32
+    assignment                     shift and go to state 9
+    print_statement                shift and go to state 10
+    if_else                        shift and go to state 11
+    type                           shift and go to state 14
+
+state 152
+
+    (50) function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .
+
+    VOID            reduce using rule 50 (function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    INT             reduce using rule 50 (function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    DOUBLE          reduce using rule 50 (function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    STRING          reduce using rule 50 (function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    BOOL            reduce using rule 50 (function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    $end            reduce using rule 50 (function_with_return -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+
+
+state 153
+
+    (49) return_statement -> RETURN expression . SEMICOLON
+    (18) expression -> expression . AND expression
+    (19) expression -> expression . OR expression
+    (20) expression -> expression . EQEQ expression
+    (21) expression -> expression . NEQ expression
+    (22) expression -> expression . MINSIGN expression
+    (23) expression -> expression . MAXSIGN expression
+    (24) expression -> expression . MINSIGNEQ expression
+    (25) expression -> expression . MAXSIGNEQ expression
+    (27) expression -> expression . PLUS expression
+    (28) expression -> expression . MINUS expression
+    (29) expression -> expression . TIMES expression
+    (30) expression -> expression . DIVIDE expression
+    (44) expression -> expression . QMARK expression COLON expression
+
+    SEMICOLON       shift and go to state 157
+    AND             shift and go to state 68
+    OR              shift and go to state 69
+    EQEQ            shift and go to state 70
+    NEQ             shift and go to state 71
+    MINSIGN         shift and go to state 72
+    MAXSIGN         shift and go to state 73
+    MINSIGNEQ       shift and go to state 74
+    MAXSIGNEQ       shift and go to state 75
+    PLUS            shift and go to state 76
+    MINUS           shift and go to state 77
+    TIMES           shift and go to state 78
+    DIVIDE          shift and go to state 79
+    QMARK           shift and go to state 80
+
+
+state 154
+
+    (11) method -> type ID LPAREN parameters RPAREN LBRACE body . return_statement RBRACE
+    (49) return_statement -> . RETURN expression SEMICOLON
+
+    RETURN          shift and go to state 148
+
+    return_statement               shift and go to state 158
+
+state 155
+
+    (59) instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .
+
+    WHILE           reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    FOR             reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    ID              reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    PRINT           reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    IF              reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    INT             reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    DOUBLE          reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    STRING          reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    BOOL            reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    VOID            reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    $end            reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    RBRACE          reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+    RETURN          reduce using rule 59 (instruction -> FOR LPAREN assignment expression SEMICOLON assignment RPAREN LBRACE instructions RBRACE .)
+
+
+state 156
+
+    (57) if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions . RBRACE
+
+    RBRACE          shift and go to state 159
+
+
+state 157
+
+    (49) return_statement -> RETURN expression SEMICOLON .
+
+    RBRACE          reduce using rule 49 (return_statement -> RETURN expression SEMICOLON .)
+
+
+state 158
+
+    (11) method -> type ID LPAREN parameters RPAREN LBRACE body return_statement . RBRACE
+
+    RBRACE          shift and go to state 160
+
+
+state 159
+
+    (57) if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .
+
+    WHILE           reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    FOR             reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    ID              reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    PRINT           reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    IF              reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    INT             reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    DOUBLE          reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    STRING          reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    BOOL            reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    VOID            reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    $end            reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    RBRACE          reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+    RETURN          reduce using rule 57 (if_else -> IF LPAREN expression RPAREN LBRACE instructions RBRACE ELSE LBRACE instructions RBRACE .)
+
+
+state 160
+
+    (11) method -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .
+
+    INT             reduce using rule 11 (method -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    DOUBLE          reduce using rule 11 (method -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    STRING          reduce using rule 11 (method -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    BOOL            reduce using rule 11 (method -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    VOID            reduce using rule 11 (method -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+    RBRACE          reduce using rule 11 (method -> type ID LPAREN parameters RPAREN LBRACE body return_statement RBRACE .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for INT in state 0 resolved as shift
+WARNING: shift/reduce conflict for DOUBLE in state 0 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 0 resolved as shift
+WARNING: shift/reduce conflict for BOOL in state 0 resolved as shift
+WARNING: shift/reduce conflict for VOID in state 0 resolved as shift
+WARNING: shift/reduce conflict for AND in state 82 resolved as shift
+WARNING: shift/reduce conflict for OR in state 82 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 82 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 82 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 82 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 82 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 82 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 82 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 82 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 82 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 82 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 82 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 82 resolved as shift
+WARNING: shift/reduce conflict for AND in state 99 resolved as shift
+WARNING: shift/reduce conflict for OR in state 99 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 99 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 99 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 99 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 99 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 99 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 99 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 99 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 99 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 99 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 99 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 99 resolved as shift
+WARNING: shift/reduce conflict for AND in state 100 resolved as shift
+WARNING: shift/reduce conflict for OR in state 100 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 100 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 100 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 100 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 100 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 100 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 100 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 100 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 100 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 100 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 100 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 100 resolved as shift
+WARNING: shift/reduce conflict for AND in state 101 resolved as shift
+WARNING: shift/reduce conflict for OR in state 101 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 101 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 101 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 101 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 101 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 101 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 101 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 101 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 101 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 101 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 101 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 101 resolved as shift
+WARNING: shift/reduce conflict for AND in state 102 resolved as shift
+WARNING: shift/reduce conflict for OR in state 102 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 102 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 102 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 102 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 102 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 102 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 102 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 102 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 102 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 102 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 102 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 102 resolved as shift
+WARNING: shift/reduce conflict for AND in state 103 resolved as shift
+WARNING: shift/reduce conflict for OR in state 103 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 103 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 103 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 103 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 103 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 103 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 103 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 103 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 103 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 103 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 103 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 103 resolved as shift
+WARNING: shift/reduce conflict for AND in state 104 resolved as shift
+WARNING: shift/reduce conflict for OR in state 104 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 104 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 104 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 104 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 104 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 104 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 104 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 104 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 104 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 104 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 104 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 104 resolved as shift
+WARNING: shift/reduce conflict for AND in state 105 resolved as shift
+WARNING: shift/reduce conflict for OR in state 105 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 105 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 105 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 105 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 105 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 105 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 105 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 105 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 105 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 105 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 105 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 105 resolved as shift
+WARNING: shift/reduce conflict for AND in state 106 resolved as shift
+WARNING: shift/reduce conflict for OR in state 106 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 106 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 106 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 106 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 106 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 106 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 106 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 106 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 106 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 106 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 106 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 106 resolved as shift
+WARNING: shift/reduce conflict for AND in state 137 resolved as shift
+WARNING: shift/reduce conflict for OR in state 137 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 137 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 137 resolved as shift
+WARNING: shift/reduce conflict for MINSIGN in state 137 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGN in state 137 resolved as shift
+WARNING: shift/reduce conflict for MINSIGNEQ in state 137 resolved as shift
+WARNING: shift/reduce conflict for MAXSIGNEQ in state 137 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 137 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 137 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 137 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 137 resolved as shift
+WARNING: shift/reduce conflict for QMARK in state 137 resolved as shift
+WARNING: reduce/reduce conflict in state 5 resolved using rule (classes -> empty)
+WARNING: rejected rule (instructions -> empty) in state 5
