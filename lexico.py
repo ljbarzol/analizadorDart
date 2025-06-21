@@ -64,6 +64,7 @@ reserved = {
    'extends': 'EXTENDS',
    'implements': 'IMPLEMENTS',
    'void' : 'VOID',
+   'main' : 'MAIN',
    'return': 'RETURN',
    'import': 'IMPORT',
    'const': 'CONST',
@@ -90,8 +91,8 @@ tokens = [
     'EQUALS',
     'LPAREN',
     'RPAREN',
-    'LBRACES',
-    'RBRACES',
+    'LBRACE',
+    'RBRACE',
     'SQUOTE',
     'ID',
     'NUMBER',
@@ -132,8 +133,8 @@ t_DIVIDE  = r'/'
 t_EQUALS = r'='
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
-t_LBRACES = r'{'
-t_RBRACES = r'}'
+t_LBRACE = r'{'
+t_RBRACE = r'}'
 t_SQUOTE = r'\''
 #Hilda Angulo
 t_EQEQ = r'=='
