@@ -1,5 +1,8 @@
 import ply.yacc as yacc
-
+import os
+from datetime import datetime
+from contextlib import redirect_stdout
+from pprint import pprint
 # Get the token map from the lexer.  This is required.
 from lexico import tokens
 from lexico import lexer
@@ -22,22 +25,33 @@ def p_declaration_list(p):
 def p_declaration(p):
     '''declaration : class
                    | function_declaration
-                   | assignment SEMICOLON'''
+                   | variable_declaration SEMICOLON
+                   | import_statement
+                   | const_declaration SEMICOLON'''
     p[0] = p[1]
 
+def p_import_statement(p):
+    '''import_statement : IMPORT STRING_LITERAL SEMICOLON'''
+    full_string = "".join(val for _, val in p[2])
+    p[0] = ('import', full_string)
+
+def p_const_declaration(p):
+    '''const_declaration : CONST declaration_type ID EQUALS expression'''
+    p[0] = ('const_declaration', p[2], p[3], p[5])
 
 # -------- ELEMENTOS BASICOS  --------#
 # BARZOLA LEIDY  
 # Reglas de precedencia 
 precedence = (
+    ('right', 'EQUALS', 'PLUSEQ', 'MINUSEQ', 'TIMESEQ', 'DIVEQ', 'NULLASSIGN'),
     ('left', 'OR'),
     ('left', 'AND'),
     ('nonassoc', 'EQEQ', 'NEQ'),
-    ('nonassoc', 'MINSIGN', 'MAXSIGN', 'MINSIGNEQ', 'MAXSIGNEQ'),
+    ('nonassoc', 'MINSIGN', 'MAXSIGN', 'MINSIGNEQ', 'MAXSIGNEQ', 'IS'),
     ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE'),
+    ('left', 'TIMES', 'DIVIDE', 'INTDIV'),
     ('right', 'ELSE'),
-    ('right', 'U_NOT'),
+    ('right', 'U_NOT', 'UMINUS'),
     ('left', 'PLUSPLUS', 'MINUSMINUS'),
     ('left', 'DOT', 'LBRACKET'),
     ('left', 'NOT'), # For postfix null-assert
@@ -58,7 +72,8 @@ def p_class_body(p):
 
 def p_class_member(p):
     '''class_member : class_property
-                    | function_declaration'''
+                    | function_declaration
+                    | constructor_declaration'''
     p[0] = p[1]
 
 def p_function_declaration(p):
@@ -74,6 +89,27 @@ def p_class_property(p):
     'class_property : declaration_type ID SEMICOLON'
     p[0] = ("property", p[1], p[2])
 
+def p_constructor_declaration(p):
+    '''constructor_declaration : ID LPAREN constructor_params RPAREN SEMICOLON'''
+    p[0] = ('constructor', p[1], p[3])
+
+def p_constructor_params(p):
+    '''constructor_params : constructor_param_list
+                          | empty'''
+    p[0] = p[1] if p[1] else []
+
+def p_constructor_param_list(p):
+    '''constructor_param_list : constructor_param_list COMMA constructor_param
+                              | constructor_param'''
+    if len(p) > 2:
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
+
+def p_constructor_param(p):
+    '''constructor_param : THIS DOT ID'''
+    p[0] = ('this', p[3])
+
 def p_declaration_type(p):
     '''declaration_type : primitive_type
                         | generic_type
@@ -86,7 +122,8 @@ def p_primitive_type(p):
                       | STRING
                       | BOOL
                       | VOID
-                      | VAR'''
+                      | VAR
+                      | DYNAMIC'''
     p[0] = ('type', p[1])
 
 def p_generic_type(p):
@@ -118,9 +155,21 @@ def p_expression_relational(p): #Alejandro Sornoza
                   | expression MAXSIGNEQ expression'''
     p[0] = (p[2], p[1], p[3])
 
+def p_expression_type_check(p):
+    '''expression : expression IS declaration_type
+                  | expression IS NOT declaration_type'''
+    if len(p) == 4:
+        p[0] = ('is', p[1], p[3])
+    else: # is not
+        p[0] = ('is!', p[1], p[4])
+
 def p_expression_not(p): #Alejandro Sornoza
     'expression : NOT expression %prec U_NOT'
     p[0] = ('not', p[2])
+
+def p_expression_uminus(p):
+    'expression : MINUS expression %prec UMINUS'
+    p[0] = ('uminus', p[2])
 
 def p_expression_postfix(p):
     '''expression : expression PLUSPLUS
@@ -152,7 +201,8 @@ def p_expression_binaria(p):
     '''expression : expression PLUS expression
                     | expression MINUS expression
                     | expression TIMES expression
-                    | expression DIVIDE expression'''
+                    | expression DIVIDE expression
+                    | expression INTDIV expression'''
     p[0] = (p[2], p[1], p[3])
 
 def p_expression_term(p):
@@ -193,36 +243,42 @@ def p_instructions(p):
         p[0] = []
 
 def p_instruction(p):
-    '''instruction : assignment SEMICOLON
+    '''instruction : variable_declaration SEMICOLON
+                    | expression SEMICOLON
                     | print_statement
                     | if_else
                     | while_loop
                     | for_loop
                     | return_statement
-                    | block_statement'''
+                    | block_statement
+                    | throw_statement'''
     p[0] = p[1]
 
 def p_block_statement(p):
     'block_statement : LBRACE instructions RBRACE'
     p[0] = ('block', p[2])
 
-# Asignaciones
-def p_assignment(p):
-    '''assignment : declaration_type ID EQUALS expression
-                  | ID assign_op expression'''
-    if len(p) == 5:
-        p[0] = ("typed_assign", p[1], p[2], p[4])
-    else:
-        p[0] = ("assign_op", p[2], p[1], p[3])
+def p_throw_statement(p):
+    'throw_statement : THROW expression SEMICOLON'
+    p[0] = ('throw', p[2])
 
-def p_assign_op(p):
-    '''assign_op : EQUALS
-                 | PLUSEQ
-                 | MINUSEQ
-                 | TIMESEQ
-                 | DIVEQ
-                 | NULLASSIGN'''
-    p[0] = p[1]
+# Asignaciones
+def p_variable_declaration(p):
+    '''variable_declaration : declaration_type ID
+                            | declaration_type ID EQUALS expression'''
+    if len(p) == 3:
+        p[0] = ('variable_declaration', p[1], p[2], None)
+    else:
+        p[0] = ('variable_declaration', p[1], p[2], p[4])
+
+def p_expression_assignment(p):
+    '''expression : expression EQUALS expression
+                  | expression PLUSEQ expression
+                  | expression MINUSEQ expression
+                  | expression TIMESEQ expression
+                  | expression DIVEQ expression
+                  | expression NULLASSIGN expression'''
+    p[0] = (p[2], p[1], p[3])
 
 def p_expression_ternary(p): #Alejandro Sornoza
     '''expression : expression QMARK expression COLON expression'''
@@ -286,7 +342,8 @@ def p_for_loop(p):
     p[0] = ('for', p[3], p[5], p[7], p[9])
 
 def p_for_initializer(p):
-    '''for_initializer : assignment
+    '''for_initializer : variable_declaration
+                       | expression
                        | empty'''
     p[0] = p[1]
 
@@ -380,29 +437,49 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
-print("Escribe tu código Dart (doble Enter para terminar). Escribe 'exit' para salir.\n")
+# Mapeo de archivos a usuarios Git
+archivos_usuarios = {
+    "algoritmo1.dart": "ljbarzol",
+    "algoritmo2.dart": "vic28code",
+    "algoritmo3.dart": "AlejandroSV2004"
+}
 
-while True:
-    buffer = ""
-    print("Nuevo bloque ↓")
-    while True:
-        try:
-            line = input('... ')
-            if line.strip().lower() == "exit":
-                print("Saliendo.")
-                exit()
-            if line == "":
-                break
-            buffer += line + "\n"
-        except EOFError:
-            exit()
+# Crear carpeta de logs si no existe
+carpeta_logs = "logsSintax"
+os.makedirs(carpeta_logs, exist_ok=True)
 
-    if not buffer.strip():
-        continue
+# Fecha y hora actual para el lote de análisis
+fecha_hora = datetime.now().strftime("%d-%m-%Y-%Hh%M")
 
+# Procesar cada archivo y generar su log individual
+for archivo, usuario in archivos_usuarios.items():
+    nombre_log = f"sintactico-{usuario}-{fecha_hora}.txt"
+    ruta_log = os.path.join(carpeta_logs, nombre_log)
+    
     try:
-        result = parser.parse(buffer, lexer=lexer)
-        print(result)
-    except Exception as e:
-        print(f"Error de análisis: {e}")
+        with open(archivo, 'r', encoding='utf-8') as f_in:
+            data = f_in.read()
 
+        print(f"Analizando {archivo}...")
+        with open(ruta_log, "w", encoding="utf-8") as log_file:
+            log_file.write(f"--- Análisis de: {archivo} (Usuario: {usuario}) ---\n\n")
+            with redirect_stdout(log_file):
+                # Reset lexer state for each file
+                lexer.lineno = 1
+                result = parser.parse(data, lexer=lexer)
+                if result:
+                    print("\n--- Resultado del Análisis (AST) ---")
+                    pprint(result)
+
+    except FileNotFoundError:
+        # Log if the source file wasn't found
+        with open(ruta_log, "w", encoding="utf-8") as log_file:
+            log_file.write(f"Error: El archivo de entrada '{archivo}' no fue encontrado.")
+        print(f"Error: El archivo de entrada '{archivo}' no fue encontrado.")
+    except Exception as e:
+        # Log any other exceptions
+        with open(ruta_log, "w", encoding="utf-8") as log_file:
+            log_file.write(f"Ocurrió un error inesperado al procesar {archivo}: {e}")
+        print(f"Ocurrió un error inesperado al procesar {archivo}: {e}")
+    
+    print(f"Log generado: {ruta_log}")

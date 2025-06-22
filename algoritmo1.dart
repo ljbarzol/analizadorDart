@@ -5,7 +5,6 @@ Por ejemplo, el factorial de 5 (escrito como 5!) es 5 * 4 * 3 * 2 * 1 = 120. El 
 */
 
 import 'dart:io';
-
 const int LIMITE_SUPERIOR = 20; // Límite máximo aceptado para evitar overflow
 
 int calcularFactorialIterativo(int n) {

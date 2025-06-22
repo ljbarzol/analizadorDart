@@ -66,6 +66,8 @@ reserved = {
    'then' : 'THEN',
    'else' : 'ELSE',
    'while' : 'WHILE',
+   'dynamic': 'DYNAMIC',
+   'is': 'IS',
    #Hilda Angulo
    'int' : 'INT',
    'double' : 'DOUBLE',
@@ -80,9 +82,10 @@ reserved = {
    'import': 'IMPORT',
    'const': 'CONST',
    'final': 'FINAL',
+   'this': 'THIS',
+   'throw': 'THROW',
    #Alejandro Sornoza
    'for':'FOR',
-   'return': 'RETURN',
    'var': 'VAR',
    'switch': 'SWITCH',
    'case': 'CASE',
@@ -122,6 +125,8 @@ tokens = [
     'SEMICOLON',
     'NOT',
     'INTDIV',
+    'DYNAMIC',
+    'IS',
     #Alejandro Sornoza
     'PLUSEQ',
     'MINUSEQ',
@@ -136,7 +141,9 @@ tokens = [
     'RBRACKET',
     'QMARK',
     'PLUSPLUS',
-    'MINUSMINUS'
+    'MINUSMINUS',
+    'THIS',
+    'THROW'
 ] + list(reserved.values())
 
 t_DOT = r'\.'

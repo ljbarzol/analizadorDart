@@ -1,0 +1,8 @@
+--- Análisis de: algoritmo1.dart (Usuario: ljbarzol) ---
+
+Syntax error at token 'QMARK' with value '?'
+Syntax error at token 'NULLCOALESCING' with value '??'
+Syntax error at token 'IF' with value 'if'
+
+--- Resultado del Análisis (AST) ---
+('program', [])
