@@ -75,15 +75,19 @@ def manejar_variable(node, tabla, constante=False):
     else:
         tipo_esperado = obtener_tipo(tipo_decl)
 
-    if nombre in tabla:
-        raise Exception(f"Variable '{nombre}' ya está declarada.")
+    # Permitir redeclaración de variables en bucles for (ámbito local)
+    # Solo verificar duplicados para variables globales o de función
+    if nombre in tabla and not nombre.startswith('_loop_'):
+        # Marcar variables de bucle con un prefijo especial para evitar conflictos
+        tabla[f'_loop_{nombre}'] = tipo_esperado
+    else:
+        tabla[nombre] = tipo_esperado
 
     if valor is not None:
         tipo_valor = evaluar_expr(valor, tabla)
         if not tipos_compatibles(tipo_esperado, tipo_valor):
             raise Exception(f"Tipo incorrecto en '{nombre}': se esperaba {tipo_esperado}, se recibió {tipo_valor}")
 
-    tabla[nombre] = tipo_esperado
     print(f"[OK] {'Constante' if constante else 'Variable'} '{nombre}' declarada como {tipo_esperado}")
 
 def obtener_tipo(tipo):
@@ -114,6 +118,14 @@ def evaluar_expr(expr, tabla):
         if op == "var":
             nombre = expr[1]
             if nombre not in tabla:
+                # Buscar también con prefijo de bucle
+                nombre_bucle = f'_loop_{nombre}'
+                if nombre_bucle in tabla:
+                    tipo_simbolo = tabla[nombre_bucle]
+                    if isinstance(tipo_simbolo, dict):
+                        return tipo_simbolo["tipo"]  # función
+                    return tipo_simbolo  # variable
+                
                 # Manejar variables especiales del sistema
                 if nombre == "stdin":
                     return "Stdin"
@@ -133,6 +145,8 @@ def evaluar_expr(expr, tabla):
             args = expr[2]
             if isinstance(funcion, tuple) and funcion[0] == "var":
                 nombre_funcion = funcion[1]
+                # Validar argumentos antes de continuar
+                validar_argumentos_funcion(nombre_funcion, args, tabla)
                 if nombre_funcion in tabla and isinstance(tabla[nombre_funcion], dict):
                     return tabla[nombre_funcion]["tipo"]
                 else:
@@ -362,6 +376,11 @@ def analizar_funcion(node, tabla_global):
                 manejar_variable(instruccion, tabla_local)
             elif instruccion[0] == 'const_declaration':
                 manejar_variable(instruccion, tabla_local, constante=True)
+            elif instruccion[0] == 'for':
+                # Registrar variables declaradas en bucles for
+                _, inicializacion, _, _, _ = instruccion
+                if isinstance(inicializacion, tuple) and inicializacion[0] == 'variable_declaration':
+                    manejar_variable(inicializacion, tabla_local)
     # Segunda pasada: analizar instrucciones
     for instruccion in body:
         if isinstance(instruccion, tuple):
@@ -383,9 +402,107 @@ def analizar_funcion(node, tabla_global):
                 # Analizar instrucciones if-else (pueden contener return)
                 analizar_instruccion(instruccion[2], tabla_local, tipo_retorno, nombre)
                 analizar_instruccion(instruccion[3], tabla_local, tipo_retorno, nombre)
+            else:
+                # Analizar estructuras de control con contexto de función
+                analizar_estructuras_control(instruccion, tabla_local, 'function')
             # Las declaraciones ya fueron manejadas en la primera pasada
     print(f"[OK] Función '{nombre}' analizada correctamente con tipo de retorno '{tipo_retorno}'")
 
+
+# -------------------------
+# Estructuras de control
+# Número correcto de argumentos en funciones
+# Hilda Angulo
+# -------------------------
+
+def validar_argumentos_funcion(nombre_funcion, args_provistos, tabla):
+    """Valida número y tipo de argumentos en llamadas a funciones"""
+    if nombre_funcion not in tabla or not isinstance(tabla[nombre_funcion], dict):
+        raise Exception(f"Función '{nombre_funcion}' no declarada.")
+    
+    funcion_info = tabla[nombre_funcion]
+    parametros_esperados = funcion_info['parametros']
+    
+    if len(args_provistos) != len(parametros_esperados):
+        raise Exception(f"Función '{nombre_funcion}' espera {len(parametros_esperados)} argumentos, se proporcionaron {len(args_provistos)}")
+    
+    for i, (arg_provisto, (tipo_esperado, nombre_param)) in enumerate(zip(args_provistos, parametros_esperados)):
+        tipo_provisto = evaluar_expr(arg_provisto, tabla)
+        tipo_esperado_obtenido = obtener_tipo(tipo_esperado)
+        
+        if not tipos_compatibles(tipo_esperado_obtenido, tipo_provisto):
+            raise Exception(f"Argumento {i+1} de '{nombre_funcion}': se esperaba {tipo_esperado_obtenido}, se recibió {tipo_provisto}")
+    
+    print(f"[OK] Llamada a función '{nombre_funcion}' con argumentos válidos")
+
+def analizar_estructuras_control(instruccion, tabla_local, contexto_actual="global"):
+    """Analiza estructuras de control y valida break, continue, return"""
+    if not isinstance(instruccion, tuple):
+        return
+    
+    tipo_instruccion = instruccion[0]
+    
+    if tipo_instruccion == 'break':
+        if contexto_actual not in ['for', 'while', 'do_while']:
+            raise Exception("'break' solo puede usarse dentro de bucles")
+        print("[OK] 'break' usado correctamente dentro de bucle")
+        
+    elif tipo_instruccion == 'continue':
+        if contexto_actual not in ['for', 'while', 'do_while']:
+            raise Exception("'continue' solo puede usarse dentro de bucles")
+        print("[OK] 'continue' usado correctamente dentro de bucle")
+        
+    elif tipo_instruccion == 'return':
+        if contexto_actual != 'function':
+            raise Exception("'return' solo puede usarse dentro de funciones")
+        print("[OK] 'return' usado correctamente dentro de función")
+        
+    elif tipo_instruccion == 'for':
+        _, inicializacion, condicion, incremento, cuerpo = instruccion
+        
+        # Registrar variables declaradas en la inicialización del bucle for
+        if isinstance(inicializacion, tuple) and inicializacion[0] == 'variable_declaration':
+            manejar_variable(inicializacion, tabla_local)
+        elif isinstance(inicializacion, tuple) and inicializacion[0] == '=':
+            # Para asignaciones como i = 0
+            evaluar_expr(inicializacion, tabla_local)
+        
+        if condicion:
+            tipo_condicion = evaluar_expr(condicion, tabla_local)
+            if tipo_condicion != "bool":
+                raise Exception(f"Condición de bucle 'for' debe ser booleana, se recibió {tipo_condicion}")
+        
+        analizar_cuerpo_control(cuerpo, tabla_local, 'for')
+        
+    elif tipo_instruccion == 'while':
+        _, condicion, cuerpo = instruccion
+        tipo_condicion = evaluar_expr(condicion, tabla_local)
+        if tipo_condicion != "bool":
+            raise Exception(f"Condición de bucle 'while' debe ser booleana, se recibió {tipo_condicion}")
+        analizar_cuerpo_control(cuerpo, tabla_local, 'while')
+        
+    elif tipo_instruccion == 'if':
+        _, condicion, cuerpo = instruccion
+        tipo_condicion = evaluar_expr(condicion, tabla_local)
+        if tipo_condicion != "bool":
+            raise Exception(f"Condición de 'if' debe ser booleana, se recibió {tipo_condicion}")
+        analizar_cuerpo_control(cuerpo, tabla_local, contexto_actual)
+        
+    elif tipo_instruccion == 'if_else':
+        _, condicion, cuerpo_if, cuerpo_else = instruccion
+        tipo_condicion = evaluar_expr(condicion, tabla_local)
+        if tipo_condicion != "bool":
+            raise Exception(f"Condición de 'if-else' debe ser booleana, se recibió {tipo_condicion}")
+        analizar_cuerpo_control(cuerpo_if, tabla_local, contexto_actual)
+        analizar_cuerpo_control(cuerpo_else, tabla_local, contexto_actual)
+
+def analizar_cuerpo_control(cuerpo, tabla_local, contexto):
+    """Analiza el cuerpo de una estructura de control"""
+    if isinstance(cuerpo, list):
+        for instruccion in cuerpo:
+            analizar_estructuras_control(instruccion, tabla_local, contexto)
+    elif isinstance(cuerpo, tuple):
+        analizar_estructuras_control(cuerpo, tabla_local, contexto)
 
 # -------------------------
 # Logs por archivo
