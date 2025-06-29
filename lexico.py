@@ -197,7 +197,7 @@ usuarios_por_archivo = {
     'algoritmo3.dart': 'AlejandroSV2004'
 }
 
-carpeta_logs = "logsArchivos"
+carpeta_logs = "logsLex"
 os.makedirs(carpeta_logs, exist_ok=True)
 
 for archivo_nombre in archivos:

@@ -1,0 +1,11 @@
+--- Análisis Semántico de: algoritmo2.dart (Usuario: vic28code) ---
+
+Syntax error at token 'CONST' with value 'const'
+Syntax error at token 'RETURN' with value 'return'
+
+--- Resultado del Análisis Semántico ---
+
+None
+
+--- Tabla de Símbolos ---
+{'LIMITE_SUPERIOR': 'int'}
