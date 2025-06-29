@@ -113,6 +113,7 @@ def p_constructor_param(p):
 def p_declaration_type(p):
     '''declaration_type : primitive_type
                         | generic_type
+                        | type_nullable
                         | ID'''
     p[0] = p[1]
 
@@ -129,6 +130,14 @@ def p_primitive_type(p):
 def p_generic_type(p):
     '''generic_type : ID MINSIGN type_list MAXSIGN'''
     p[0] = ('generic', p[1], p[3])
+
+def p_type_nullable(p):
+    'type_nullable : primitive_type QMARK'
+    p[0] = ('nullable_type', p[1])
+
+def p_expression_nullcoalescing(p):
+    'expression : expression NULLCOALESCING expression'
+    p[0] = ('null_coalescing', p[1], p[3])
 
 def p_type_list(p):
     '''type_list : type_list COMMA declaration_type
@@ -251,8 +260,47 @@ def p_instruction(p):
                     | for_loop
                     | return_statement
                     | block_statement
-                    | throw_statement'''
+                    | throw_statement
+                    | try_statement'''
     p[0] = p[1]
+
+def p_try_statement(p):
+    '''try_statement : TRY block_statement catch_clauses
+                     | TRY block_statement catch_clauses finally_clause
+                     | TRY block_statement finally_clause'''
+    if len(p) == 4:
+        if p[3] is None or isinstance(p[3], list):
+            # try + block + catch(es)
+            p[0] = ('try', p[2], p[3], None)
+        else:
+            # try + block + finally
+            p[0] = ('try', p[2], [], p[3])
+    else:
+        # try + block + catch(es) + finally
+        p[0] = ('try', p[2], p[3], p[4])
+
+def p_catch_clauses(p):
+    '''catch_clauses : catch_clauses catch_clause
+                     | catch_clause'''
+    if len(p) == 3:
+        p[0] = p[1] + [p[2]]
+    else:
+        p[0] = [p[1]]
+
+def p_catch_clause(p):
+    '''catch_clause : CATCH LPAREN ID RPAREN block_statement
+                    | CATCH LPAREN ID ID RPAREN block_statement'''
+    if len(p) == 6:
+        # catch (e) { ... }
+        p[0] = ('catch', None, p[3], p[5])
+    else:
+        # catch (ExceptionType e) { ... }
+        p[0] = ('catch', p[3], p[4], p[6])
+
+def p_finally_clause(p):
+    'finally_clause : FINALLY block_statement'
+    p[0] = p[2]
+
 
 def p_block_statement(p):
     'block_statement : LBRACE instructions RBRACE'
@@ -421,6 +469,41 @@ def p_expression_list(p):
     else:
         p[0] = []
 
+#Try- catch
+def p_try_statement(p):
+    '''try_statement : TRY block_statement catch_clauses
+                     | TRY block_statement catch_clauses finally_clause
+                     | TRY block_statement finally_clause'''
+    if len(p) == 4:
+        # try + block + catch(es)
+        p[0] = ('try', p[2], p[3], None)
+    elif len(p) == 5:
+        # try + block + catch(es) + finally
+        p[0] = ('try', p[2], p[3], p[4])
+    else:
+        # try + block + finally
+        p[0] = ('try', p[2], [], p[3])
+
+def p_catch_clauses(p):
+    '''catch_clauses : catch_clauses catch_clause
+                     | catch_clause'''
+    if len(p) == 3:
+        p[0] = p[1] + [p[2]]
+    else:
+        p[0] = [p[1]]
+
+def p_catch_clause(p):
+    '''catch_clause : CATCH LPAREN ID ID RPAREN block_statement
+                    | CATCH LPAREN ID RPAREN block_statement'''
+    if len(p) == 7:
+        p[0] = ('catch', p[3], p[4], p[6])  # catch (ExceptionType e) { ... }
+    else:
+        p[0] = ('catch', None, p[3], p[5])  # catch (e) { ... }
+
+def p_finally_clause(p):
+    'finally_clause : FINALLY block_statement'
+    p[0] = p[2]
+
 
 # Vacío
 def p_empty(p):
@@ -457,7 +540,7 @@ for archivo, usuario in archivos_usuarios.items():
     ruta_log = os.path.join(carpeta_logs, nombre_log)
     
     try:
-        with open(archivo, 'r', encoding='utf-8') as f_in:
+        with open("algoritmos/"+archivo, 'r', encoding='utf-8') as f_in:
             data = f_in.read()
 
         print(f"Analizando {archivo}...")

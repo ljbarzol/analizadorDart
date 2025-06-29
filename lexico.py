@@ -84,6 +84,9 @@ reserved = {
    'final': 'FINAL',
    'this': 'THIS',
    'throw': 'THROW',
+    'try': 'TRY',
+   'catch': 'CATCH',
+    'finally': 'FINALLY',
    #Alejandro Sornoza
    'for':'FOR',
    'var': 'VAR',
@@ -125,8 +128,6 @@ tokens = [
     'SEMICOLON',
     'NOT',
     'INTDIV',
-    'DYNAMIC',
-    'IS',
     #Alejandro Sornoza
     'PLUSEQ',
     'MINUSEQ',
@@ -135,15 +136,13 @@ tokens = [
     'NULLASSIGN',
     'MINSIGNEQ',
     'MAXSIGNEQ',
-    'QMARK_DOT',
     'NULLCOALESCING',
+    'QMARK_DOT',
     'LBRACKET',
     'RBRACKET',
     'QMARK',
     'PLUSPLUS',
     'MINUSMINUS',
-    'THIS',
-    'THROW'
 ] + list(reserved.values())
 
 t_DOT = r'\.'
@@ -179,8 +178,8 @@ t_DIVEQ = r'/='
 t_NULLASSIGN = r'\?\?='
 t_MINSIGNEQ = r'<='
 t_MAXSIGNEQ = r'>='
-t_QMARK_DOT = r'\?\.'
 t_NULLCOALESCING = r'\?\?'
+t_QMARK_DOT = r'\?\.'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 t_PLUSPLUS = r'\+\+'
@@ -202,7 +201,7 @@ carpeta_logs = "logsArchivos"
 os.makedirs(carpeta_logs, exist_ok=True)
 
 for archivo_nombre in archivos:
-    with open(archivo_nombre, 'r', encoding='utf-8') as archivo:
+    with open("algoritmos/"+archivo_nombre, 'r', encoding='utf-8') as archivo:
         data = archivo.read()
         lexer.lineno = 1  
         lexer.input(data)
