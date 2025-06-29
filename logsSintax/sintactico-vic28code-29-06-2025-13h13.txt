@@ -1,0 +1,16 @@
+--- Análisis de: algoritmo2.dart (Usuario: vic28code) ---
+
+Syntax error at token 'CONST' with value 'const'
+Syntax error at token 'RETURN' with value 'return'
+
+--- Resultado del Análisis (AST) ---
+('program',
+ [('function',
+   ('type', 'void'),
+   'main',
+   [],
+   [('variable_declaration',
+     ('generic', 'List', [('type', 'int')]),
+     'numeros',
+     ('array', [1, 2, 3])),
+    ('=', ('subscript', ('var', 'numeros'), 0), [('str', 'Hola')])])])

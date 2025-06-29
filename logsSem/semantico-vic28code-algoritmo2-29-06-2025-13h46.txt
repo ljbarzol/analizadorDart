@@ -1,0 +1,1 @@
+Ocurrió un error inesperado al procesar algoritmo2.dart: Variable no declarada: pi

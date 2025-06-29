@@ -26,8 +26,19 @@ def t_COMMENT(t):
     pass
 
 def t_STRING_LITERAL(t):
-    r'\"([^\\\"]|\\.)*\"'
-    t.value = t.value[1:-1]
+    r'\"([^\\\"]|\\.)*\"|\'([^\\\']|\\.)*\''
+    import re
+    raw = t.value[1:-1]
+    parts = re.split(r'(\$[a-zA-Z_][a-zA-Z0-9_]*)', raw)
+    t.value = []
+    for part in parts:
+        if part.startswith('$'):
+            t.value.append(('var', part[1:]))  # elimina el '$'
+        else:
+            t.value.append(('str', part))
+    return t
+
+
 
 #Alejandro Sornoza
 
@@ -55,6 +66,8 @@ reserved = {
    'then' : 'THEN',
    'else' : 'ELSE',
    'while' : 'WHILE',
+   'dynamic': 'DYNAMIC',
+   'is': 'IS',
    #Hilda Angulo
    'int' : 'INT',
    'double' : 'DOUBLE',
@@ -63,18 +76,25 @@ reserved = {
    'class': 'CLASS',
    'extends': 'EXTENDS',
    'implements': 'IMPLEMENTS',
+   'void' : 'VOID',
+   'main' : 'MAIN',
    'return': 'RETURN',
    'import': 'IMPORT',
    'const': 'CONST',
    'final': 'FINAL',
+   'this': 'THIS',
+   'throw': 'THROW',
+    'try': 'TRY',
+   'catch': 'CATCH',
+    'finally': 'FINALLY',
    #Alejandro Sornoza
    'for':'FOR',
-   'return': 'RETURN',
    'var': 'VAR',
    'switch': 'SWITCH',
    'case': 'CASE',
    'break': 'BREAK',
-   'continue': 'CONTINUE'
+   'continue': 'CONTINUE',
+   'print': 'PRINT'
 }
 
 #TOKENS
@@ -89,8 +109,8 @@ tokens = [
     'EQUALS',
     'LPAREN',
     'RPAREN',
-    'LBRACES',
-    'RBRACES',
+    'LBRACE',
+    'RBRACE',
     'SQUOTE',
     'ID',
     'NUMBER',
@@ -116,10 +136,13 @@ tokens = [
     'NULLASSIGN',
     'MINSIGNEQ',
     'MAXSIGNEQ',
-    'QMARK_DOT',
     'NULLCOALESCING',
+    'QMARK_DOT',
     'LBRACKET',
-    'RBRACKET'
+    'RBRACKET',
+    'QMARK',
+    'PLUSPLUS',
+    'MINUSMINUS',
 ] + list(reserved.values())
 
 t_DOT = r'\.'
@@ -131,8 +154,8 @@ t_DIVIDE  = r'/'
 t_EQUALS = r'='
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
-t_LBRACES = r'{'
-t_RBRACES = r'}'
+t_LBRACE = r'{'
+t_RBRACE = r'}'
 t_SQUOTE = r'\''
 #Hilda Angulo
 t_EQEQ = r'=='
@@ -147,6 +170,7 @@ t_SEMICOLON = r';'
 t_NOT= r'!'
 t_INTDIV = r'~\/'
 #Alejandro Sornoza
+t_QMARK = r'\?'
 t_PLUSEQ = r'\+='
 t_MINUSEQ = r'-='
 t_TIMESEQ = r'\*='
@@ -154,10 +178,12 @@ t_DIVEQ = r'/='
 t_NULLASSIGN = r'\?\?='
 t_MINSIGNEQ = r'<='
 t_MAXSIGNEQ = r'>='
-t_QMARK_DOT = r'\?\.'
 t_NULLCOALESCING = r'\?\?'
+t_QMARK_DOT = r'\?\.'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
+t_PLUSPLUS = r'\+\+'
+t_MINUSMINUS = r'--'
 
 
 #Crear analizador léxico
@@ -171,11 +197,11 @@ usuarios_por_archivo = {
     'algoritmo3.dart': 'AlejandroSV2004'
 }
 
-carpeta_logs = "logsArchivos"
+carpeta_logs = "logsLex"
 os.makedirs(carpeta_logs, exist_ok=True)
 
 for archivo_nombre in archivos:
-    with open(archivo_nombre, 'r', encoding='utf-8') as archivo:
+    with open("algoritmos/"+archivo_nombre, 'r', encoding='utf-8') as archivo:
         data = archivo.read()
         lexer.lineno = 1  
         lexer.input(data)
