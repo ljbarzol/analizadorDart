@@ -12,7 +12,7 @@ void insertionSort(List<int> arr) {
 }
 
 void main() {
-  List<int> numbers = [5, 2, 9, 1, 5, 6];
+  List<int> numbers = "hola";
   print("Antes de ordenar: $numbers");
   insertionSort(numbers);
   print("Después de ordenar: $numbers");

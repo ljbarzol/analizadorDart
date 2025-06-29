@@ -1,9 +1,0 @@
---- Análisis Semántico de: algoritmo3.dart (Usuario: AlejandroSV2004) ---
-
-
---- Resultado del Análisis Semántico ---
-
-None
-
---- Tabla de Símbolos ---
-{'LIMITE_SUPERIOR': 'int'}
