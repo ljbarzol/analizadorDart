@@ -12,30 +12,52 @@ symbol_table = {}
 # -------------------------
 # Análisis semántico general
 # -------------------------
-def analizar(ast):
+def analizar(ast, symbol_table):
     if not ast or ast[0] != 'program':
         raise Exception("AST inválido o vacío")
-    
+
     declaraciones = ast[1]
+
+    # Primera pasada: registrar funciones y variables globales
     for decl in declaraciones:
-        analizar_declaracion(decl)
+        tipo = decl[0]
+        if tipo == 'function':
+            _, tipo_retorno, nombre, parametros, _ = decl
+            tipo_retorno = obtener_tipo(tipo_retorno)
+            if nombre in symbol_table:
+                raise Exception(f"Función '{nombre}' ya declarada.")
+            symbol_table[nombre] = {'tipo': tipo_retorno, 'parametros': parametros}
+        elif tipo == 'variable_declaration':
+            manejar_variable(decl, symbol_table)
+        elif tipo == 'const_declaration':
+            manejar_variable(decl, symbol_table, constante=True)
+        # Puedes extender aquí para clases, imports, etc.
+
+    # Segunda pasada: analizar cuerpos de funciones y expresiones globales
+    for decl in declaraciones:
+        analizar_declaracion(decl, symbol_table)
+
     return symbol_table
 
-def analizar_declaracion(node):
+
+def analizar_declaracion(node, tabla):
     tipo = node[0]
 
     if tipo == 'variable_declaration':
-        manejar_variable(node)
+        # Ya manejada en la pasada 1
+        pass
     elif tipo == 'const_declaration':
-        manejar_variable(node, constante=True)
+        pass
     elif tipo == 'function':
-        analizar_funcion(node)
+        analizar_funcion(node, tabla)
+    elif tipo == 'print':
+        evaluar_expr(node[1], tabla)
 
 # -------------------------
 # Variables y Constantes
 # Leidy Barzola
 # -------------------------
-def manejar_variable(node, constante=False):
+def manejar_variable(node, tabla, constante=False):
     _, tipo_decl, nombre, valor = node
 
     # Reconocer listas genéricas
@@ -46,15 +68,15 @@ def manejar_variable(node, constante=False):
     else:
         tipo_esperado = obtener_tipo(tipo_decl)
 
-    if nombre in symbol_table:
+    if nombre in tabla:
         raise Exception(f"Variable '{nombre}' ya está declarada.")
 
     if valor is not None:
-        tipo_valor = evaluar_expr(valor)
+        tipo_valor = evaluar_expr(valor, tabla)
         if not tipos_compatibles(tipo_esperado, tipo_valor):
             raise Exception(f"Tipo incorrecto en '{nombre}': se esperaba {tipo_esperado}, se recibió {tipo_valor}")
 
-    symbol_table[nombre] = tipo_esperado
+    tabla[nombre] = tipo_esperado
     print(f"[OK] {'Constante' if constante else 'Variable'} '{nombre}' declarada como {tipo_esperado}")
 
 def obtener_tipo(tipo):
@@ -63,6 +85,11 @@ def obtener_tipo(tipo):
             return tipo[1]
         elif tipo[0] == 'nullable_type':
             return obtener_tipo(tipo[1]) + '?'
+        elif tipo[0] == 'generic':
+            # Manejar tipos genéricos como List<int>
+            tipo_base = tipo[1]
+            tipo_param = obtener_tipo(tipo[2][0])
+            return f"{tipo_base}<{tipo_param}>"
     elif isinstance(tipo, str):
         return tipo
     return "unknown"
@@ -70,8 +97,7 @@ def obtener_tipo(tipo):
 # -------------------------
 # Evaluar expresiones
 # Incluye asignación y subscript
-# -------------------------
-def evaluar_expr(expr):
+def evaluar_expr(expr, tabla):
     if isinstance(expr, list) and len(expr) == 1:
         expr = expr[0]
 
@@ -80,15 +106,31 @@ def evaluar_expr(expr):
 
         if op == "var":
             nombre = expr[1]
-            if nombre not in symbol_table:
-                raise Exception(f"Variable no declarada: {nombre}")
-            return symbol_table[nombre]
+            if nombre not in tabla:
+                raise Exception(f"Variable o función no declarada: {nombre}")
+            tipo_simbolo = tabla[nombre]
+            if isinstance(tipo_simbolo, dict):
+                return tipo_simbolo["tipo"]  # función
+            return tipo_simbolo  # variable
+
+        elif op == "call":
+            funcion = expr[1]
+            args = expr[2]
+            if isinstance(funcion, tuple) and funcion[0] == "var":
+                nombre_funcion = funcion[1]
+                if nombre_funcion in tabla and isinstance(tabla[nombre_funcion], dict):
+                    # Verificar número de parámetros si quieres
+                    return tabla[nombre_funcion]["tipo"]
+                else:
+                    raise Exception(f"Función '{nombre_funcion}' no declarada.")
+            else:
+                raise Exception(f"Llamada inválida: {funcion}")
 
         elif op == "subscript":
             lista = expr[1]
             valor = expr[2]
-            tipo_lista = evaluar_expr(lista)
-            tipo_elemento = evaluar_expr(valor)
+            tipo_lista = evaluar_expr(lista, tabla)
+            tipo_elemento = evaluar_expr(valor, tabla)
 
             if tipo_lista.startswith("List<"):
                 tipo_param = tipo_lista[5:-1]
@@ -103,8 +145,8 @@ def evaluar_expr(expr):
             izquierda = expr[1]
             derecha = expr[2]
 
-            tipo_izquierda = evaluar_expr(izquierda)
-            tipo_derecha = evaluar_expr(derecha)
+            tipo_izquierda = evaluar_expr(izquierda, tabla)
+            tipo_derecha = evaluar_expr(derecha, tabla)
 
             if not tipos_compatibles(tipo_izquierda, tipo_derecha):
                 raise Exception(
@@ -115,15 +157,15 @@ def evaluar_expr(expr):
             elementos = expr[1]
             tipo_elementos = set()
             for elemento in elementos:
-                tipo_elementos.add(evaluar_expr(elemento))
+                tipo_elementos.add(evaluar_expr(elemento, tabla))
             if len(tipo_elementos) == 1:
                 return f"List<{tipo_elementos.pop()}>"
             else:
                 return "List<dynamic>"
 
         elif op in ('+', '-', '*', '/', '//'):
-            t1 = evaluar_expr(expr[1])
-            t2 = evaluar_expr(expr[2])
+            t1 = evaluar_expr(expr[1], tabla)
+            t2 = evaluar_expr(expr[2], tabla)
             return promover_tipo(t1, t2)
 
         elif op in ("string_lit", "str"):
@@ -134,6 +176,45 @@ def evaluar_expr(expr):
             return "double"
         elif op == "bool_lit":
             return "bool"
+        elif op == "uminus":
+            tipo = evaluar_expr(expr[1], tabla)
+            if tipo in ("int", "double"):
+                return tipo
+            else:
+                return "unknown"
+        elif op == "~/":
+            t1 = evaluar_expr(expr[1], tabla)
+            t2 = evaluar_expr(expr[2], tabla)
+            # División entera: si ambos son int, resultado int; si alguno es double, resultado double
+            if t1 == "double" or t2 == "double":
+                return "double"
+            return "int"
+        elif op == "member_access":
+            objeto = expr[1]
+            propiedad = expr[2]
+            tipo_objeto = evaluar_expr(objeto, tabla)
+            
+            # Manejar propiedades conocidas de tipos específicos
+            if tipo_objeto.startswith("List<"):
+                if propiedad == "length":
+                    return "int"
+                elif propiedad == "isEmpty":
+                    return "bool"
+                elif propiedad == "isNotEmpty":
+                    return "bool"
+            elif tipo_objeto == "String":
+                if propiedad == "length":
+                    return "int"
+                elif propiedad == "isEmpty":
+                    return "bool"
+            elif tipo_objeto == "Map":
+                if propiedad == "length":
+                    return "int"
+                elif propiedad == "isEmpty":
+                    return "bool"
+            
+            # Para propiedades no reconocidas, devolver dynamic
+            return "dynamic"
         else:
             return "unknown"
 
@@ -143,6 +224,12 @@ def evaluar_expr(expr):
         return "double"
     elif isinstance(expr, str):
         return "String"
+    # Si es un valor negativo representado como un número (por ejemplo, -1)
+    try:
+        if isinstance(expr, (int, float)):
+            return "int" if isinstance(expr, int) else "double"
+    except Exception:
+        pass
     return "unknown"
 
 # -------------------------
@@ -164,30 +251,42 @@ def promover_tipo(t1, t2):
 # Funciones
 # Alejandro Sornoza
 # -------------------------
-def analizar_funcion(node):
+def analizar_funcion(node, tabla_global):
     _, tipo_retorno, nombre, parametros, body = node
     tipo_retorno = obtener_tipo(tipo_retorno)
-    symbol_table[nombre] = {'tipo': tipo_retorno, 'parametros': parametros}
-
+    # Registrar la función en la tabla global
+    tabla_global[nombre] = {'tipo': tipo_retorno, 'parametros': parametros}
+    # Crear tabla local para variables de la función
+    tabla_local = dict(tabla_global)  # Hereda funciones y globales, pero variables locales se agregan aquí
+    
+    # Registrar parámetros de la función en la tabla local
+    for tipo_param, nombre_param in parametros:
+        tipo_param_obtenido = obtener_tipo(tipo_param)
+        tabla_local[nombre_param] = tipo_param_obtenido
+        print(f"[OK] Parámetro '{nombre_param}' registrado como {tipo_param_obtenido}")
+    
+    # Primera pasada: registrar variables locales y constantes
+    for instruccion in body:
+        if isinstance(instruccion, tuple):
+            if instruccion[0] == 'variable_declaration':
+                manejar_variable(instruccion, tabla_local)
+            elif instruccion[0] == 'const_declaration':
+                manejar_variable(instruccion, tabla_local, constante=True)
+    # Segunda pasada: analizar instrucciones
     for instruccion in body:
         if isinstance(instruccion, tuple):
             if instruccion[0] == 'return':
                 _, expr = instruccion
-                tipo_expr = evaluar_expr(expr) if expr else 'void'
+                tipo_expr = evaluar_expr(expr, tabla_local) if expr else 'void'
                 if not tipos_compatibles(tipo_retorno, tipo_expr):
                     raise Exception(
                         f"Tipo de retorno inválido en '{nombre}': se esperaba {tipo_retorno}, se recibió {tipo_expr}")
-
             elif instruccion[0] == '=':
                 # Asignación directa
-                evaluar_expr(instruccion)
-
+                evaluar_expr(instruccion, tabla_local)
             elif instruccion[0] == 'expression':
-                evaluar_expr(instruccion[1])
-
-            elif instruccion[0] == 'variable_declaration':
-                manejar_variable(instruccion)
-
+                evaluar_expr(instruccion[1], tabla_local)
+            # Las declaraciones ya fueron manejadas en la primera pasada
     print(f"[OK] Función '{nombre}' analizada correctamente con tipo de retorno '{tipo_retorno}'")
 
 
@@ -210,6 +309,9 @@ for archivo, usuario in archivos_usuarios.items():
     nombre_log = f"semantico-{usuario}-algoritmo{numero_algoritmo}-{fecha_hora}.txt"
     ruta_log = os.path.join(carpeta_logs, nombre_log)
 
+    # Crear tabla de símbolos independiente para cada archivo
+    symbol_table = {}
+
     try:
         with open("algoritmos/" + archivo, 'r', encoding='utf-8') as f_in:
             data = f_in.read()
@@ -223,7 +325,7 @@ for archivo, usuario in archivos_usuarios.items():
 
                 if arbol_sintactico:
                     print("\n--- Resultado del Análisis Semántico ---\n")
-                    resultado_semantico = analizar(arbol_sintactico)
+                    resultado_semantico = analizar(arbol_sintactico, symbol_table)
                     print(resultado_semantico)
 
                     print("\n--- Tabla de Símbolos ---")
