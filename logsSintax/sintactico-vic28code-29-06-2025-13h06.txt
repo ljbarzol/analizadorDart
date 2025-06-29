@@ -14,4 +14,3 @@ Syntax error at token 'RETURN' with value 'return'
      ('type', 'var'),
      'area',
      ('call', ('var', 'calcularArea'), [('var', 'r')])),
-    ('print', [('str', 'El área es: '), ('var', 'area'), ('str', '')])])])

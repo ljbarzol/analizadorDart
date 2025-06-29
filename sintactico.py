@@ -253,15 +253,18 @@ def p_instructions(p):
 
 def p_instruction(p):
     '''instruction : variable_declaration SEMICOLON
-                    | expression SEMICOLON
-                    | print_statement
-                    | if_else
-                    | while_loop
-                    | for_loop
-                    | return_statement
-                    | block_statement
-                    | throw_statement
-                    | try_statement'''
+                   | expression SEMICOLON
+                   | print_statement
+                   | if_else
+                   | while_loop
+                   | for_loop
+                   | return_statement
+                   | block_statement
+                   | throw_statement
+                   | try_statement
+                   | const_declaration SEMICOLON'''
+    p[0] = p[1]
+
     p[0] = p[1]
 
 def p_try_statement(p):

@@ -1,0 +1,20 @@
+--- Análisis Semántico de: algoritmo2.dart (Usuario: vic28code) ---
+
+Syntax error at token 'CONST' with value 'const'
+Syntax error at token 'RETURN' with value 'return'
+
+--- Resultado del Análisis Semántico ---
+
+[OK] Variable 'numeros' declarada como List<int>
+[OK] Función 'main' analizada correctamente con tipo de retorno 'void'
+{'LIMITE_SUPERIOR': 'int', 'calcularFactorialIterativo': {'tipo': 'int', 'parametros': [(('type', 'int'), 'n')]}, 'resultado': 'int', 'calcularFactorialRecursivo': {'tipo': 'int', 'parametros': [(('type', 'int'), 'n')]}, 'main': {'tipo': 'void', 'parametros': []}, 'numeros': 'List<int>'}
+
+--- Tabla de Símbolos ---
+{'LIMITE_SUPERIOR': 'int',
+ 'calcularFactorialIterativo': {'parametros': [(('type', 'int'), 'n')],
+                                'tipo': 'int'},
+ 'calcularFactorialRecursivo': {'parametros': [(('type', 'int'), 'n')],
+                                'tipo': 'int'},
+ 'main': {'parametros': [], 'tipo': 'void'},
+ 'numeros': 'List<int>',
+ 'resultado': 'int'}
