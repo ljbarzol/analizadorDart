@@ -1,0 +1,32 @@
+--- Análisis Semántico de: algoritmo1.dart (Usuario: ljbarzol) ---
+
+
+--- Resultado del Análisis Semántico ---
+
+[OK] Constante 'LIMITE_SUPERIOR' declarada como int
+[OK] Parámetro 'n' registrado como int
+[OK] Variable 'resultado' declarada como int
+[OK] Función 'calcularFactorialIterativo' analizada correctamente con tipo de retorno 'int'
+[OK] Parámetro 'n' registrado como int
+[OK] Función 'calcularFactorialRecursivo' analizada correctamente con tipo de retorno 'int'
+[OK] Parámetro 'valor' registrado como dynamic
+[OK] Función 'validarEntrada' analizada correctamente con tipo de retorno 'bool'
+[OK] Parámetro 'numero' registrado como int
+[OK] Parámetro 'resultado' registrado como int
+[OK] Función 'mostrarResultado' analizada correctamente con tipo de retorno 'void'
+[OK] Variable 'entrada' declarada como String?
+[OK] Función 'main' analizada correctamente con tipo de retorno 'void'
+{'LIMITE_SUPERIOR': 'int', 'calcularFactorialIterativo': {'tipo': 'int', 'parametros': [(('type', 'int'), 'n')]}, 'calcularFactorialRecursivo': {'tipo': 'int', 'parametros': [(('type', 'int'), 'n')]}, 'validarEntrada': {'tipo': 'bool', 'parametros': [(('type', 'dynamic'), 'valor')]}, 'mostrarResultado': {'tipo': 'void', 'parametros': [(('type', 'int'), 'numero'), (('type', 'int'), 'resultado')]}, 'main': {'tipo': 'void', 'parametros': []}}
+
+--- Tabla de Símbolos ---
+{'LIMITE_SUPERIOR': 'int',
+ 'calcularFactorialIterativo': {'parametros': [(('type', 'int'), 'n')],
+                                'tipo': 'int'},
+ 'calcularFactorialRecursivo': {'parametros': [(('type', 'int'), 'n')],
+                                'tipo': 'int'},
+ 'main': {'parametros': [], 'tipo': 'void'},
+ 'mostrarResultado': {'parametros': [(('type', 'int'), 'numero'),
+                                     (('type', 'int'), 'resultado')],
+                      'tipo': 'void'},
+ 'validarEntrada': {'parametros': [(('type', 'dynamic'), 'valor')],
+                    'tipo': 'bool'}}

@@ -10,7 +10,6 @@ void insertionSort(List<int> arr) {
     arr[j + 1] = key;
   }
 }
-
 void main() {
   List<int> numbers = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
   print("Antes de ordenar: $numbers");

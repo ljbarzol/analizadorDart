@@ -53,7 +53,7 @@ precedence = (
     ('right', 'ELSE'),
     ('right', 'U_NOT', 'UMINUS'),
     ('left', 'PLUSPLUS', 'MINUSMINUS'),
-    ('left', 'DOT', 'LBRACKET'),
+    ('left', 'DOT', 'LBRACKET', 'LPAREN'),
     ('left', 'NOT'), # For postfix null-assert
 )
 
@@ -235,8 +235,13 @@ def p_factor_string(p):
     p[0] = p[1]
 
 def p_factor_id(p):
-    'factor : ID'
-    p[0] = ("var", p[1])
+    '''factor : ID
+               | TRUE
+               | FALSE'''
+    if p[1] in ('true', 'false'):
+        p[0] = ('bool_lit', p[1])
+    else:
+        p[0] = ("var", p[1])
 
 def p_factor_expr_group(p):
     'factor : LPAREN expression RPAREN'

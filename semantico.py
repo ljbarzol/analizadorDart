@@ -12,6 +12,14 @@ symbol_table = {}
 # -------------------------
 # Análisis semántico general
 # -------------------------
+
+# -------------------------
+# Agregado de cambios varios para
+# ajustar el analisis semantico a
+# los algoritmos planteados
+# - Hilda Angulo
+# -------------------------
+
 def analizar(ast, symbol_table):
     if not ast or ast[0] != 'program':
         raise Exception("AST inválido o vacío")
@@ -31,7 +39,6 @@ def analizar(ast, symbol_table):
             manejar_variable(decl, symbol_table)
         elif tipo == 'const_declaration':
             manejar_variable(decl, symbol_table, constante=True)
-        # Puedes extender aquí para clases, imports, etc.
 
     # Segunda pasada: analizar cuerpos de funciones y expresiones globales
     for decl in declaraciones:
@@ -107,7 +114,15 @@ def evaluar_expr(expr, tabla):
         if op == "var":
             nombre = expr[1]
             if nombre not in tabla:
-                raise Exception(f"Variable o función no declarada: {nombre}")
+                # Manejar variables especiales del sistema
+                if nombre == "stdin":
+                    return "Stdin"
+                elif nombre == "stdout":
+                    return "Stdout"
+                elif nombre == "stderr":
+                    return "Stderr"
+                else:
+                    raise Exception(f"Variable o función no declarada: {nombre}")
             tipo_simbolo = tabla[nombre]
             if isinstance(tipo_simbolo, dict):
                 return tipo_simbolo["tipo"]  # función
@@ -119,10 +134,33 @@ def evaluar_expr(expr, tabla):
             if isinstance(funcion, tuple) and funcion[0] == "var":
                 nombre_funcion = funcion[1]
                 if nombre_funcion in tabla and isinstance(tabla[nombre_funcion], dict):
-                    # Verificar número de parámetros si quieres
                     return tabla[nombre_funcion]["tipo"]
                 else:
                     raise Exception(f"Función '{nombre_funcion}' no declarada.")
+            elif isinstance(funcion, tuple) and funcion[0] == "member_access":
+                # Llamada a método de objeto: objeto.metodo(args)
+                objeto = funcion[1]
+                metodo = funcion[2]
+                tipo_objeto = evaluar_expr(objeto, tabla)
+                
+                # Manejar métodos conocidos de tipos específicos
+                if tipo_objeto == "Stdin" and metodo == "readLineSync":
+                    return "String?"
+                elif tipo_objeto == "String" and metodo == "parse":
+                    return "int"
+                elif tipo_objeto == "String" and metodo == "isEmpty":
+                    return "bool"
+                elif tipo_objeto == "String" and metodo == "isNotEmpty":
+                    return "bool"
+                elif tipo_objeto.startswith("List<") and metodo == "add":
+                    return "void"
+                elif tipo_objeto.startswith("List<") and metodo == "remove":
+                    return "bool"
+                elif tipo_objeto.startswith("List<") and metodo == "clear":
+                    return "void"
+                else:
+                    # Para métodos no reconocidos, devolver dynamic
+                    return "dynamic"
             else:
                 raise Exception(f"Llamada inválida: {funcion}")
 
@@ -167,7 +205,24 @@ def evaluar_expr(expr, tabla):
             t1 = evaluar_expr(expr[1], tabla)
             t2 = evaluar_expr(expr[2], tabla)
             return promover_tipo(t1, t2)
-
+        elif op in ('MINSIGNEQ', 'MAXSIGNEQ', 'MINSIGN', 'MAXSIGN', 'EQEQ', 'NEQ', '>=', '<=', '>', '<', '==', '!='):
+            # Operadores relacionales siempre devuelven bool
+            evaluar_expr(expr[1], tabla)  # Verificar que los operandos existan
+            evaluar_expr(expr[2], tabla)
+            return "bool"
+        elif op in ('AND', 'OR', '&&', '||'):
+            # Operadores lógicos siempre devuelven bool
+            t1 = evaluar_expr(expr[1], tabla)
+            t2 = evaluar_expr(expr[2], tabla)
+            if t1 != "bool" or t2 != "bool":
+                raise Exception(f"Operadores lógicos requieren operandos booleanos, se recibió {t1} y {t2}")
+            return "bool"
+        elif op == "not":
+            # Operador NOT siempre devuelve bool
+            t1 = evaluar_expr(expr[1], tabla)
+            if t1 != "bool":
+                raise Exception(f"Operador NOT requiere operando booleano, se recibió {t1}")
+            return "bool"
         elif op in ("string_lit", "str"):
             return "String"
         elif op == "int_lit":
@@ -215,6 +270,12 @@ def evaluar_expr(expr, tabla):
             
             # Para propiedades no reconocidas, devolver dynamic
             return "dynamic"
+        elif op == "is":
+            # Operador 'is' para verificación de tipo
+            return "bool"
+        elif op == "is!":
+            # Operador 'is!' para verificación de tipo negada
+            return "bool"
         else:
             return "unknown"
 
@@ -223,6 +284,9 @@ def evaluar_expr(expr, tabla):
     elif isinstance(expr, float):
         return "double"
     elif isinstance(expr, str):
+        # Manejar literales booleanos que aparecen como strings
+        if expr == "true" or expr == "false":
+            return "bool"
         return "String"
     # Si es un valor negativo representado como un número (por ejemplo, -1)
     try:
@@ -246,6 +310,32 @@ def promover_tipo(t1, t2):
     if "double" in (t1, t2):
         return "double"
     return t1
+
+def analizar_instruccion(instruccion, tabla_local, tipo_retorno, nombre_funcion):
+    """Analiza una instrucción recursivamente, buscando return statements"""
+    if isinstance(instruccion, tuple):
+        if instruccion[0] == 'return':
+            _, expr = instruccion
+            tipo_expr = evaluar_expr(expr, tabla_local) if expr else 'void'
+            if not tipos_compatibles(tipo_retorno, tipo_expr):
+                raise Exception(
+                    f"Tipo de retorno inválido en '{nombre_funcion}': se esperaba {tipo_retorno}, se recibió {tipo_expr}")
+        elif instruccion[0] == 'if':
+            # Analizar instrucción if (puede contener return)
+            analizar_instruccion(instruccion[2], tabla_local, tipo_retorno, nombre_funcion)
+        elif instruccion[0] == 'if_else':
+            # Analizar instrucciones if-else (pueden contener return)
+            analizar_instruccion(instruccion[2], tabla_local, tipo_retorno, nombre_funcion)
+            analizar_instruccion(instruccion[3], tabla_local, tipo_retorno, nombre_funcion)
+        elif instruccion[0] == 'block':
+            # Analizar bloque de instrucciones
+            for instr in instruccion[1]:
+                analizar_instruccion(instr, tabla_local, tipo_retorno, nombre_funcion)
+        elif instruccion[0] == '=':
+            # Asignación directa
+            evaluar_expr(instruccion, tabla_local)
+        elif instruccion[0] == 'expression':
+            evaluar_expr(instruccion[1], tabla_local)
 
 # -------------------------
 # Funciones
@@ -286,6 +376,13 @@ def analizar_funcion(node, tabla_global):
                 evaluar_expr(instruccion, tabla_local)
             elif instruccion[0] == 'expression':
                 evaluar_expr(instruccion[1], tabla_local)
+            elif instruccion[0] == 'if':
+                # Analizar instrucción if (puede contener return)
+                analizar_instruccion(instruccion[2], tabla_local, tipo_retorno, nombre)
+            elif instruccion[0] == 'if_else':
+                # Analizar instrucciones if-else (pueden contener return)
+                analizar_instruccion(instruccion[2], tabla_local, tipo_retorno, nombre)
+                analizar_instruccion(instruccion[3], tabla_local, tipo_retorno, nombre)
             # Las declaraciones ya fueron manejadas en la primera pasada
     print(f"[OK] Función '{nombre}' analizada correctamente con tipo de retorno '{tipo_retorno}'")
 

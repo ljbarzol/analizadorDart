@@ -84,9 +84,11 @@ reserved = {
    'final': 'FINAL',
    'this': 'THIS',
    'throw': 'THROW',
-    'try': 'TRY',
+   'try': 'TRY',
    'catch': 'CATCH',
-    'finally': 'FINALLY',
+   'finally': 'FINALLY',
+   'true': 'TRUE',
+   'false': 'FALSE',
    #Alejandro Sornoza
    'for':'FOR',
    'var': 'VAR',
