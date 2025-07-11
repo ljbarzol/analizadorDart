@@ -1,0 +1,1 @@
+Ocurrió un error inesperado al procesar algoritmo3.dart: Tipo incorrecto en 'numbers': se esperaba List<int>, se recibió String

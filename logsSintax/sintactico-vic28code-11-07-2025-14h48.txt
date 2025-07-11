@@ -1,0 +1,15 @@
+--- Análisis de: algoritmo2.dart (Usuario: vic28code) ---
+
+
+--- Resultado del Análisis (AST) ---
+('program',
+ [('import', 'dart:math'),
+  ('function',
+   ('type', 'void'),
+   'main',
+   [],
+   [('variable_declaration',
+     ('generic', 'List', [('type', 'int')]),
+     'numeros',
+     ('array', [1, 2, 3])),
+    ('=', ('subscript', ('var', 'numeros'), 0), [('str', 'Hola')])])])
