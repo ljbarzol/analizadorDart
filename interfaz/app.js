@@ -1,78 +1,94 @@
-// ===== CONFIGURACIÓN INICIAL =====
-document.addEventListener('DOMContentLoaded', function() {
-  // Selecciona todos los grupos de botones en la página
-  document.querySelectorAll('.button-group').forEach(group => {
-    initButtonGroup(group);
+document.addEventListener('DOMContentLoaded', function () {
+  const runButton = document.querySelector('.run-button');
+  const codeTextarea = document.querySelector('.code-textarea');
+  const outputContent = document.querySelector('.output-content');
+  const analysisButtons = document.querySelectorAll('.button-analizador');
+
+  let currentAnalysis = 'lexico'; // Valor por defecto
+
+  // Configurar botones de análisis
+  analysisButtons.forEach(button => {
+    button.addEventListener('click', function () {
+      analysisButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      currentAnalysis = this.dataset.tab;
+    });
   });
+  runButton.addEventListener('click', async function () {
+    const codigo = codeTextarea.value.trim();
+
+    if (!codigo) {
+      outputContent.textContent = 'Error: Ingresa código Dart para analizar';
+      return;
+    }
+
+    outputContent.innerHTML = `<div class="loading">Analizando...</div>`;
+
+    try {
+      let resultado;
+      switch (currentAnalysis) {
+        case 'lexico':
+          resultado = await enviarAnalisisAlBackend(codigo, 'lexico');
+          outputContent.innerHTML = formatearResultadoLexico(resultado);
+          break;
+        case 'sintactico':
+          outputContent.innerHTML = 'Análisis sintáctico no implementado aún';
+          break;
+        case 'semantico':
+          outputContent.innerHTML = 'Análisis semántico no implementado aún';
+          break;
+        case 'todo':
+          outputContent.innerHTML = 'Análisis completo no implementado aún';
+          break;
+      }
+    } catch (error) {
+      outputContent.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+    }
+  });
+
+  async function enviarAnalisisAlBackend(codigo, tipo) {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/analizar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          codigo: codigo,
+          tipo: tipo
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Error en la respuesta del servidor');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      throw new Error(`Error al conectar con el servidor: ${error.message}`);
+    }
+  }
+
+  function formatearResultadoLexico(resultado) {
+    if (resultado.status === 'error') {
+      return `<div class="error">${resultado.message}</div>`;
+    }
+
+    let html = '<div class="resultado-lexico">';
+    html += '<h3>Resultado del Análisis Léxico</h3>';
+    html += '<table><tr><th>Tipo</th><th>Valor</th><th>Línea</th></tr>';
+    
+    resultado.tokens.forEach(token => {
+      html += `<tr>
+          <td>${token.type}</td>
+          <td>${token.value}</td>
+          <td>${token.lineno}</td>
+      </tr>`;
+    });
+    
+    html += '</table>';
+    html += `<p class="total-tokens">Total de tokens encontrados: ${resultado.total_tokens}</p>`;
+    html += '</div>';
+    return html;
+  }
 });
-
-// ===== FUNCIÓN PRINCIPAL =====
-function initButtonGroup(buttonGroup) {
-  const buttons = buttonGroup.querySelectorAll('.button-analizador');
-  
-  // 1. Configura el evento click para cada botón
-  buttons.forEach(button => {
-    button.addEventListener('click', handleButtonClick);
-  });
-  
-  // 2. Recupera la selección guardada (opcional)
-  const groupId = buttonGroup.id || 'default';
-  const savedSelection = localStorage.getItem(`selectedButton-${groupId}`);
-  
-  if (savedSelection) {
-    const selectedBtn = buttonGroup.querySelector(`[data-tab="${savedSelection}"]`);
-    if (selectedBtn) selectedBtn.classList.add('active');
-  }
-}
-
-// ===== MANEJADOR DE CLIC =====
-function handleButtonClick() {
-  const buttonGroup = this.closest('.button-group');
-  const groupId = buttonGroup.id || 'default';
-  const tabId = this.dataset.tab;
-  
-  // 1. Remover clase 'active' de todos los botones del grupo
-  buttonGroup.querySelectorAll('.button-analizador').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  
-  // 2. Añadir clase 'active' al botón clickeado
-  this.classList.add('active');
-  
-  // 3. Guardar selección (opcional)
-  localStorage.setItem(`selectedButton-${groupId}`, tabId);
-  
-  // 4. Ejecutar función asociada al botón
-  executeTabFunction(tabId);
-}
-
-// ===== FUNCIONES POR BOTÓN =====
-function executeTabFunction(tabId) {
-  switch(tabId) {
-    case 'lexico':
-      console.log('Ejecutando análisis léxico');
-      // Tu código para análisis léxico aquí
-      break;
-      
-    case 'sintactico':
-      console.log('Ejecutando análisis sintáctico');
-      // Tu código para análisis sintáctico aquí
-      break;
-      
-    case 'semantico':
-      console.log('Ejecutando análisis semántico');
-      // Tu código para análisis semántico aquí
-      break;
-      
-    default:
-      console.warn(`Función no definida para el tab: ${tabId}`);
-  }
-}
-
-// ===== FUNCIONES ADICIONALES =====
-function resetButtonGroup(groupId = 'default') {
-  localStorage.removeItem(`selectedButton-${groupId}`);
-  document.querySelectorAll('.button-analizador').forEach(btn => {
-    btn.classList.remove('active');
-  });
-}

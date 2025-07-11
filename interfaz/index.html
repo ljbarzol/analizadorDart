@@ -1,33 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Analizador de Código en Dart</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="header-container">
+      <img class="header-logo" src=".\images\icono-dart.png" />
+      <div class="header">Analizador de Código en Dart</div>
+      <img class="header-logo" src=".\images\icono-python.png" />
+    </div>
+    <div class="container">
+      <div class="left">
+        <div class="button-group">
+          <button class="button-analizador" data-tab="lexico">
+            Analizador Léxico
+          </button>
+          <button class="button-analizador" data-tab="sintactico">
+            Analizador Sintáctico
+          </button>
+          <button class="button-analizador" data-tab="semantico">
+            Analizador Semántico
+          </button>
+          <button class="button-analizador" data-tab="todo">
+            Analizador total
+          </button>
+        </div>
+        <div class="code-input-container">
+          
+          <textarea
+            class="code-textarea"
+            placeholder="Escribe tu código aquí..."
+          ></textarea>
+          <div class="code-header">
+            <button class="run-button">
+              <span class="run-icon">▶</span> Analizar
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="output-title">Resultado del Análisis</div>
+       <div class="output-content">
+    <!-- Plantilla para resultados léxicos (oculta inicialmente) -->
+    <div id="lexico-template" class="result-template">
+      <h3>Resultado del Análisis Léxico</h3>
+      <div class="table-container">
+        <table class="token-table">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Valor</th>
+              <th>Línea</th>
+            </tr>
+          </thead>
+          <tbody id="token-tbody"></tbody>
+        </table>
+      </div>
+      <p class="token-count">Total de tokens: <span id="token-count">0</span></p>
+    </div>
+      <div id="error-message" class="error-message" style="display: none;"></div>
+  </div>
 
-</head>
-<body>
-    <div class ="header-container">
-        <img class="header-logo" src=".\images\icono-dart.png" />
-        <div class="header">Analizador de Código en Dart</div>
-        <img class="header-logo" src=".\images\icono-python.png" />
+      </div>
     </div>
-        <div class="container">
-    <div class="left">
-  <div class="button-group">
-    <button class="button-analizador" data-tab="lexico">Analizador Léxico</button>
-    <button class="button-analizador" data-tab="sintactico">Analizador Sintáctico</button>
-    <button class="button-analizador" data-tab="semantico">Analizador Semántico</button>
-    <button class="button-analizador" data-tab="todo">Analizador total</button>
-  </div>
-  <textarea placeholder="Escribe tu código Dart aquí..."></textarea>
-    </div>
-    <div class="right">
-      <div class="output-title">Resultado del Análisis</div>
-      <div class="output-content"></div>
-    </div>
-  </div>
     <script src="./app.js"></script>
-
-</body>
+  </body>
 </html>

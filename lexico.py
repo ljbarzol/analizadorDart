@@ -222,6 +222,62 @@ for archivo_nombre in archivos:
                 log.write(f"Error: {e}\n")
 
         print(f"Log creado: {ruta_log}")
+       
+
+#Funcionalidad para interfaz web
+from flask import Flask, request, jsonify
+from flask_cors import CORS  # Añade esto en los imports
+import ply.lex as lex
+
+app = Flask(__name__)
+CORS(app)  # Añade esto justo después de crear la app
+
+
+# Aquí va tu definición del lexer (tokens, reglas, etc.)
+# ...
+
+lexer = lex.lex()
+
+@app.route('/analizar', methods=['POST', 'OPTIONS'])
+def analizar_codigo():
+    if request.method == 'OPTIONS':
+        # Responder a las solicitudes OPTIONS para CORS
+        response = jsonify({'status': 'preflight'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', '*')
+        response.headers.add('Access-Control-Allow-Methods', 'POST')
+        return response
+    
+    data = request.get_json()
+    codigo = data.get('codigo', '')
+    tipo_analisis = data.get('tipo', 'lexico')
+    
+    if tipo_analisis == 'lexico':
+        return analisis_lexico(codigo)
+    return jsonify({'error': 'Tipo de análisis no soportado'})
+
+def analisis_lexico(codigo):
+    lexer.lineno = 1
+    lexer.input(codigo)
+    
+    tokens_encontrados = []
+    try:
+        for tok in lexer:
+            tokens_encontrados.append({
+                'type': tok.type,
+                'value': str(tok.value),
+                'lineno': tok.lineno
+            })
         
-#PRUEBA 
-lexer.input(data)
+        return jsonify({
+            'status': 'success',
+            'tokens': tokens_encontrados,
+            'total_tokens': len(tokens_encontrados)
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        })
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
