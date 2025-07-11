@@ -62,10 +62,12 @@ def analizar_declaracion(node, tabla):
 
 # -------------------------
 # Variables y Constantes
+# Leidy Barzola
 # -------------------------
 def manejar_variable(node, tabla, constante=False):
     _, tipo_decl, nombre, valor = node
 
+    # Reconocer listas genéricas
     if isinstance(tipo_decl, tuple) and tipo_decl[0] == 'generic':
         tipo_base = tipo_decl[1]
         tipo_param = obtener_tipo(tipo_decl[2][0])
@@ -351,6 +353,7 @@ def analizar_instruccion(instruccion, tabla_local, tipo_retorno, nombre_funcion)
 
 # -------------------------
 # Funciones
+# Alejandro Sornoza
 # -------------------------
 def analizar_funcion(node, tabla_global):
     _, tipo_retorno, nombre, parametros, body = node
@@ -502,9 +505,8 @@ def analizar_cuerpo_control(cuerpo, tabla_local, contexto):
         analizar_estructuras_control(cuerpo, tabla_local, contexto)
 
 # -------------------------
-# Logs por archivo (opcional)
+# Logs por archivo
 # -------------------------
-# Si quieres seguir generando logs por archivo:
 archivos_usuarios = {
     "algoritmo1.dart": "ljbarzol",
     "algoritmo2.dart": "vic28code",
@@ -555,15 +557,17 @@ for archivo, usuario in archivos_usuarios.items():
     print(f"Log generado: {ruta_log}")
 
 # -------------------------
-# Modo GUI: expón esta función
+# ANALIZADOR SEMÁNTICO PARA LA INTERFAZ
 # -------------------------
+
 def analizar_semantico(codigo):
-    symbol_table = {}
-    lexer.lineno = 1
+    from sintactico import parser, lexer  # Usa tu parser construido y lexer de sintáctico
+    symbol_table = {}  # Tabla de símbolos limpia para cada ejecución
+    lexer.lineno = 1   # Resetea línea
     try:
         ast = parser.parse(codigo, lexer=lexer)
         if not ast:
-            return ["No se pudo generar AST. Revisa tu entrada."]
+            return ["Error: No se pudo generar AST. Revisa tu entrada."]
         analizar(ast, symbol_table)
         return ["Todo está bien: sin errores semánticos."]
     except Exception as e:

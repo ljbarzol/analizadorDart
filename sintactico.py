@@ -548,30 +548,33 @@ for archivo, usuario in archivos_usuarios.items():
     
     print(f"Log generado: {ruta_log}")
 
-def analizar_sintactico(codigo):
-    from lexico import lexer  # Asegúrate de importar el lexer
-    errores = []  # Guarda los mensajes de error
+# -------------------------------
+# ANALIZADOR SINTÁCTICO PARA GUI
+# -------------------------------
 
+def analizar_sintactico(codigo):
+    from lexico import lexer  # Usa el lexer que ya tienes
+    errores = []
+
+    # Función de error personalizada
     def custom_error(p):
         if p:
             errores.append(f"Error de sintaxis: token '{p.type}' con valor '{p.value}'")
         else:
             errores.append("Error de sintaxis: fin de entrada inesperado")
 
-    # Construye un parser nuevo con la función de error personalizada
-    parser = yacc.yacc()
-    parser.errorfunc = custom_error
+    # Construir parser con función de error temporal
+    local_parser = yacc.yacc()
+    local_parser.errorfunc = custom_error
 
-    lexer.lineno = 1
+    lexer.lineno = 1  # Reset de línea
     try:
-        result = parser.parse(codigo, lexer=lexer)
+        result = local_parser.parse(codigo, lexer=lexer)
         if result:
             return ["Todo está bien: sin errores sintácticos."]
+        elif errores:
+            return errores
         else:
-            if errores:
-                return errores
-            else:
-                return ["No se generó AST. Revisa paréntesis, operadores y puntos y coma."]
+            return ["No se generó AST. Revisa tu entrada."]
     except Exception as e:
         return [f"Error sintáctico: {e}"]
-
