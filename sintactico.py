@@ -569,3 +569,31 @@ for archivo, usuario in archivos_usuarios.items():
         print(f"Ocurrió un error inesperado al procesar {archivo}: {e}")
     
     print(f"Log generado: {ruta_log}")
+
+def analizar_sintactico(codigo):
+    from lexico import lexer  # Asegúrate de importar el lexer
+    errores = []  # Guarda los mensajes de error
+
+    def custom_error(p):
+        if p:
+            errores.append(f"Error de sintaxis: token '{p.type}' con valor '{p.value}'")
+        else:
+            errores.append("Error de sintaxis: fin de entrada inesperado")
+
+    # Construye un parser nuevo con la función de error personalizada
+    parser = yacc.yacc()
+    parser.errorfunc = custom_error
+
+    lexer.lineno = 1
+    try:
+        result = parser.parse(codigo, lexer=lexer)
+        if result:
+            return ["Todo está bien: sin errores sintácticos."]
+        else:
+            if errores:
+                return errores
+            else:
+                return ["No se generó AST. Revisa paréntesis, operadores y puntos y coma."]
+    except Exception as e:
+        return [f"Error sintáctico: {e}"]
+

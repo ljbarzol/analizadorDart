@@ -12,33 +12,31 @@ symbol_table = {}
 # -------------------------
 # Análisis semántico general
 # -------------------------
-def analizar(ast):
+def analizar(ast, tabla):
     if not ast or ast[0] != 'program':
         raise Exception("AST inválido o vacío")
     
     declaraciones = ast[1]
     for decl in declaraciones:
-        analizar_declaracion(decl)
-    return symbol_table
+        analizar_declaracion(decl, tabla)
+    return tabla
 
-def analizar_declaracion(node):
+def analizar_declaracion(node, tabla):
     tipo = node[0]
 
     if tipo == 'variable_declaration':
-        manejar_variable(node)
+        manejar_variable(node, tabla)
     elif tipo == 'const_declaration':
-        manejar_variable(node, constante=True)
+        manejar_variable(node, tabla, constante=True)
     elif tipo == 'function':
-        analizar_funcion(node)
+        analizar_funcion(node, tabla)
 
 # -------------------------
 # Variables y Constantes
-# Leidy Barzola
 # -------------------------
-def manejar_variable(node, constante=False):
+def manejar_variable(node, tabla, constante=False):
     _, tipo_decl, nombre, valor = node
 
-    # Reconocer listas genéricas
     if isinstance(tipo_decl, tuple) and tipo_decl[0] == 'generic':
         tipo_base = tipo_decl[1]
         tipo_param = obtener_tipo(tipo_decl[2][0])
@@ -46,15 +44,15 @@ def manejar_variable(node, constante=False):
     else:
         tipo_esperado = obtener_tipo(tipo_decl)
 
-    if nombre in symbol_table:
+    if nombre in tabla:
         raise Exception(f"Variable '{nombre}' ya está declarada.")
 
     if valor is not None:
-        tipo_valor = evaluar_expr(valor)
+        tipo_valor = evaluar_expr(valor, tabla)
         if not tipos_compatibles(tipo_esperado, tipo_valor):
             raise Exception(f"Tipo incorrecto en '{nombre}': se esperaba {tipo_esperado}, se recibió {tipo_valor}")
 
-    symbol_table[nombre] = tipo_esperado
+    tabla[nombre] = tipo_esperado
     print(f"[OK] {'Constante' if constante else 'Variable'} '{nombre}' declarada como {tipo_esperado}")
 
 def obtener_tipo(tipo):
@@ -69,9 +67,8 @@ def obtener_tipo(tipo):
 
 # -------------------------
 # Evaluar expresiones
-# Incluye asignación y subscript
 # -------------------------
-def evaluar_expr(expr):
+def evaluar_expr(expr, tabla):
     if isinstance(expr, list) and len(expr) == 1:
         expr = expr[0]
 
@@ -80,15 +77,15 @@ def evaluar_expr(expr):
 
         if op == "var":
             nombre = expr[1]
-            if nombre not in symbol_table:
+            if nombre not in tabla:
                 raise Exception(f"Variable no declarada: {nombre}")
-            return symbol_table[nombre]
+            return tabla[nombre]
 
         elif op == "subscript":
             lista = expr[1]
             valor = expr[2]
-            tipo_lista = evaluar_expr(lista)
-            tipo_elemento = evaluar_expr(valor)
+            tipo_lista = evaluar_expr(lista, tabla)
+            tipo_elemento = evaluar_expr(valor, tabla)
 
             if tipo_lista.startswith("List<"):
                 tipo_param = tipo_lista[5:-1]
@@ -103,8 +100,8 @@ def evaluar_expr(expr):
             izquierda = expr[1]
             derecha = expr[2]
 
-            tipo_izquierda = evaluar_expr(izquierda)
-            tipo_derecha = evaluar_expr(derecha)
+            tipo_izquierda = evaluar_expr(izquierda, tabla)
+            tipo_derecha = evaluar_expr(derecha, tabla)
 
             if not tipos_compatibles(tipo_izquierda, tipo_derecha):
                 raise Exception(
@@ -115,15 +112,15 @@ def evaluar_expr(expr):
             elementos = expr[1]
             tipo_elementos = set()
             for elemento in elementos:
-                tipo_elementos.add(evaluar_expr(elemento))
+                tipo_elementos.add(evaluar_expr(elemento, tabla))
             if len(tipo_elementos) == 1:
                 return f"List<{tipo_elementos.pop()}>"
             else:
                 return "List<dynamic>"
 
         elif op in ('+', '-', '*', '/', '//'):
-            t1 = evaluar_expr(expr[1])
-            t2 = evaluar_expr(expr[2])
+            t1 = evaluar_expr(expr[1], tabla)
+            t2 = evaluar_expr(expr[2], tabla)
             return promover_tipo(t1, t2)
 
         elif op in ("string_lit", "str"):
@@ -162,38 +159,36 @@ def promover_tipo(t1, t2):
 
 # -------------------------
 # Funciones
-# Alejandro Sornoza
 # -------------------------
-def analizar_funcion(node):
+def analizar_funcion(node, tabla):
     _, tipo_retorno, nombre, parametros, body = node
     tipo_retorno = obtener_tipo(tipo_retorno)
-    symbol_table[nombre] = {'tipo': tipo_retorno, 'parametros': parametros}
+    tabla[nombre] = {'tipo': tipo_retorno, 'parametros': parametros}
 
     for instruccion in body:
         if isinstance(instruccion, tuple):
             if instruccion[0] == 'return':
                 _, expr = instruccion
-                tipo_expr = evaluar_expr(expr) if expr else 'void'
+                tipo_expr = evaluar_expr(expr, tabla) if expr else 'void'
                 if not tipos_compatibles(tipo_retorno, tipo_expr):
                     raise Exception(
                         f"Tipo de retorno inválido en '{nombre}': se esperaba {tipo_retorno}, se recibió {tipo_expr}")
 
             elif instruccion[0] == '=':
-                # Asignación directa
-                evaluar_expr(instruccion)
+                evaluar_expr(instruccion, tabla)
 
             elif instruccion[0] == 'expression':
-                evaluar_expr(instruccion[1])
+                evaluar_expr(instruccion[1], tabla)
 
             elif instruccion[0] == 'variable_declaration':
-                manejar_variable(instruccion)
+                manejar_variable(instruccion, tabla)
 
     print(f"[OK] Función '{nombre}' analizada correctamente con tipo de retorno '{tipo_retorno}'")
 
-
 # -------------------------
-# Logs por archivo
+# Logs por archivo (opcional)
 # -------------------------
+# Si quieres seguir generando logs por archivo:
 archivos_usuarios = {
     "algoritmo1.dart": "ljbarzol",
     "algoritmo2.dart": "vic28code",
@@ -223,7 +218,7 @@ for archivo, usuario in archivos_usuarios.items():
 
                 if arbol_sintactico:
                     print("\n--- Resultado del Análisis Semántico ---\n")
-                    resultado_semantico = analizar(arbol_sintactico)
+                    resultado_semantico = analizar(arbol_sintactico, {})
                     print(resultado_semantico)
 
                     print("\n--- Tabla de Símbolos ---")
@@ -239,3 +234,18 @@ for archivo, usuario in archivos_usuarios.items():
             log_file.write(f"Ocurrió un error inesperado al procesar {archivo}: {e}\n")
 
     print(f"Log generado: {ruta_log}")
+
+# -------------------------
+# Modo GUI: expón esta función
+# -------------------------
+def analizar_semantico(codigo):
+    symbol_table = {}
+    lexer.lineno = 1
+    try:
+        ast = parser.parse(codigo, lexer=lexer)
+        if not ast:
+            return ["No se pudo generar AST. Revisa tu entrada."]
+        analizar(ast, symbol_table)
+        return ["Todo está bien: sin errores semánticos."]
+    except Exception as e:
+        return [f"Error semántico: {e}"]

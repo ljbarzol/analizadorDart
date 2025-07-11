@@ -223,3 +223,17 @@ for archivo_nombre in archivos:
         
 #PRUEBA 
 lexer.input(data)
+
+def analizar_lexico(codigo):
+    lexer.lineno = 1
+    lexer.input(codigo)
+    resultado = []
+    try:
+        for tok in lexer:
+            resultado.append(str(tok))
+    except Exception as e:
+        resultado.append(f"Error: {e}")
+    if not resultado:
+        resultado.append("Todo está bien: sin errores léxicos.")
+    return resultado
+
