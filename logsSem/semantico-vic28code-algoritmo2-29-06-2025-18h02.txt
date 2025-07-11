@@ -1,0 +1,30 @@
+--- Análisis Semántico de: algoritmo2.dart (Usuario: vic28code) ---
+
+Syntax error at token 'BREAK' with value 'break'
+Syntax error at token 'NUMBER' with value '10'
+Syntax error at token 'PRINT' with value 'print'
+
+--- Resultado del Análisis Semántico ---
+
+[OK] Parámetro 'lista' registrado como List<int>
+[OK] Parámetro 'valor' registrado como int
+[OK] Variable 'izquierda' declarada como int
+[OK] Variable 'derecha' declarada como int
+[OK] Función 'busquedaBinaria' analizada correctamente con tipo de retorno 'int'
+[OK] Función 'obtenerValor' analizada correctamente con tipo de retorno 'int'
+[OK] Parámetro 'texto1' registrado como String
+[OK] Parámetro 'texto2' registrado como String
+[OK] Función 'concatenar' analizada correctamente con tipo de retorno 'String'
+[OK] Función 'probarTipos' analizada correctamente con tipo de retorno 'void'
+{'busquedaBinaria': {'tipo': 'int', 'parametros': [(('generic', 'List', [('type', 'int')]), 'lista'), (('type', 'int'), 'valor')]}, 'obtenerValor': {'tipo': 'int', 'parametros': []}, 'concatenar': {'tipo': 'String', 'parametros': [(('type', 'String'), 'texto1'), (('type', 'String'), 'texto2')]}, 'probarTipos': {'tipo': 'void', 'parametros': []}}
+
+--- Tabla de Símbolos ---
+{'busquedaBinaria': {'parametros': [(('generic', 'List', [('type', 'int')]),
+                                     'lista'),
+                                    (('type', 'int'), 'valor')],
+                     'tipo': 'int'},
+ 'concatenar': {'parametros': [(('type', 'String'), 'texto1'),
+                               (('type', 'String'), 'texto2')],
+                'tipo': 'String'},
+ 'obtenerValor': {'parametros': [], 'tipo': 'int'},
+ 'probarTipos': {'parametros': [], 'tipo': 'void'}}

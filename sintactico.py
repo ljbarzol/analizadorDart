@@ -49,11 +49,11 @@ precedence = (
     ('nonassoc', 'EQEQ', 'NEQ'),
     ('nonassoc', 'MINSIGN', 'MAXSIGN', 'MINSIGNEQ', 'MAXSIGNEQ', 'IS'),
     ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE', 'INTDIV'),
+    ('left', 'TIMES', 'DIVIDE', 'INTDIV', 'MODULE'),
     ('right', 'ELSE'),
     ('right', 'U_NOT', 'UMINUS'),
     ('left', 'PLUSPLUS', 'MINUSMINUS'),
-    ('left', 'DOT', 'LBRACKET'),
+    ('left', 'DOT', 'LBRACKET', 'LPAREN'),
     ('left', 'NOT'), # For postfix null-assert
 )
 
@@ -208,10 +208,11 @@ def p_expression_null_assert(p):
 
 def p_expression_binaria(p):
     '''expression : expression PLUS expression
-                    | expression MINUS expression
-                    | expression TIMES expression
-                    | expression DIVIDE expression
-                    | expression INTDIV expression'''
+                  | expression MINUS expression
+                  | expression TIMES expression
+                  | expression DIVIDE expression
+                  | expression INTDIV expression
+                  | expression MODULE expression'''
     p[0] = (p[2], p[1], p[3])
 
 def p_expression_term(p):
@@ -235,8 +236,13 @@ def p_factor_string(p):
     p[0] = p[1]
 
 def p_factor_id(p):
-    'factor : ID'
-    p[0] = ("var", p[1])
+    '''factor : ID
+               | TRUE
+               | FALSE'''
+    if p[1] in ('true', 'false'):
+        p[0] = ('bool_lit', p[1])
+    else:
+        p[0] = ("var", p[1])
 
 def p_factor_expr_group(p):
     'factor : LPAREN expression RPAREN'
@@ -262,9 +268,9 @@ def p_instruction(p):
                    | block_statement
                    | throw_statement
                    | try_statement
-                   | const_declaration SEMICOLON'''
-    p[0] = p[1]
-
+                   | const_declaration SEMICOLON
+                   | break_statement
+                   | continue_statement'''
     p[0] = p[1]
 
 def p_try_statement(p):
@@ -472,41 +478,13 @@ def p_expression_list(p):
     else:
         p[0] = []
 
-#Try- catch
-def p_try_statement(p):
-    '''try_statement : TRY block_statement catch_clauses
-                     | TRY block_statement catch_clauses finally_clause
-                     | TRY block_statement finally_clause'''
-    if len(p) == 4:
-        # try + block + catch(es)
-        p[0] = ('try', p[2], p[3], None)
-    elif len(p) == 5:
-        # try + block + catch(es) + finally
-        p[0] = ('try', p[2], p[3], p[4])
-    else:
-        # try + block + finally
-        p[0] = ('try', p[2], [], p[3])
+def p_break_statement(p):
+    'break_statement : BREAK SEMICOLON'
+    p[0] = ('break',)
 
-def p_catch_clauses(p):
-    '''catch_clauses : catch_clauses catch_clause
-                     | catch_clause'''
-    if len(p) == 3:
-        p[0] = p[1] + [p[2]]
-    else:
-        p[0] = [p[1]]
-
-def p_catch_clause(p):
-    '''catch_clause : CATCH LPAREN ID ID RPAREN block_statement
-                    | CATCH LPAREN ID RPAREN block_statement'''
-    if len(p) == 7:
-        p[0] = ('catch', p[3], p[4], p[6])  # catch (ExceptionType e) { ... }
-    else:
-        p[0] = ('catch', None, p[3], p[5])  # catch (e) { ... }
-
-def p_finally_clause(p):
-    'finally_clause : FINALLY block_statement'
-    p[0] = p[2]
-
+def p_continue_statement(p):
+    'continue_statement : CONTINUE SEMICOLON'
+    p[0] = ('continue',)
 
 # Vacío
 def p_empty(p):

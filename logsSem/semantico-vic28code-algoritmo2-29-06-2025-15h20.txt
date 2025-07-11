@@ -1,0 +1,1 @@
+Ocurrió un error inesperado al procesar algoritmo2.dart: Tipo incorrecto en 'derecha': se esperaba int, se recibió unknown

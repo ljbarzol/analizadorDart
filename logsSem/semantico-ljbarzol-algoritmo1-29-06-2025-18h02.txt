@@ -1,0 +1,1 @@
+Ocurrió un error inesperado al procesar algoritmo1.dart: Variable o función no declarada: i

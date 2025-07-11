@@ -1,0 +1,38 @@
+--- Análisis de: algoritmo2.dart (Usuario: vic28code) ---
+
+Syntax error at token 'BREAK' with value 'break'
+Syntax error at token 'WHILE' with value 'while'
+Syntax error at token 'DOT' with value '.'
+
+--- Resultado del Análisis (AST) ---
+('program',
+ [('function',
+   ('type', 'int'),
+   'busquedaBinaria',
+   [(('generic', 'List', [('type', 'int')]), 'lista'),
+    (('type', 'int'), 'valor')],
+   [('variable_declaration', ('type', 'int'), 'izquierda', 0),
+    ('variable_declaration',
+     ('type', 'int'),
+     'derecha',
+     ('-', ('member_access', ('var', 'lista'), 'length'), 1)),
+    ('while',
+     ('<=', ('var', 'izquierda'), ('var', 'derecha')),
+     ('block',
+      [('variable_declaration',
+        ('type', 'int'),
+        'medio',
+        ('~/', ('+', ('var', 'izquierda'), ('var', 'derecha')), 2)),
+       ('if_else',
+        ('==',
+         ('subscript', ('var', 'lista'), ('var', 'medio')),
+         ('var', 'valor')),
+        ('block', [('return', ('var', 'medio'))]),
+        ('if_else',
+         ('<',
+          ('subscript', ('var', 'lista'), ('var', 'medio')),
+          ('var', 'valor')),
+         ('block', [('=', ('var', 'izquierda'), ('+', ('var', 'medio'), 1))]),
+         ('block',
+          [('=', ('var', 'derecha'), ('-', ('var', 'medio'), 1))])))])),
+    ('return', ('uminus', 1))])])

@@ -1,0 +1,20 @@
+--- Análisis Semántico de: algoritmo2.dart (Usuario: vic28code) ---
+
+Syntax error at token 'MODULE' with value '%'
+Syntax error at token 'WHILE' with value 'while'
+Syntax error at token 'DOT' with value '.'
+
+--- Resultado del Análisis Semántico ---
+
+[OK] Parámetro 'lista' registrado como List<int>
+[OK] Parámetro 'valor' registrado como int
+[OK] Variable 'izquierda' declarada como int
+[OK] Variable 'derecha' declarada como int
+[OK] Función 'busquedaBinaria' analizada correctamente con tipo de retorno 'int'
+{'busquedaBinaria': {'tipo': 'int', 'parametros': [(('generic', 'List', [('type', 'int')]), 'lista'), (('type', 'int'), 'valor')]}}
+
+--- Tabla de Símbolos ---
+{'busquedaBinaria': {'parametros': [(('generic', 'List', [('type', 'int')]),
+                                     'lista'),
+                                    (('type', 'int'), 'valor')],
+                     'tipo': 'int'}}

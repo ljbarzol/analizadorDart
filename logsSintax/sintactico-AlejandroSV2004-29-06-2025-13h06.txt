@@ -40,13 +40,3 @@
     ('print', [('str', 'Antes de ordenar: '), ('var', 'numbers'), ('str', '')]),
     ('call', ('var', 'insertionSort'), [('var', 'numbers')]),
     ('print',
-     [('str', 'Después de ordenar: '), ('var', 'numbers'), ('str', '')])]),
-  ('function',
-   ('type', 'void'),
-   'main',
-   [],
-   [('variable_declaration',
-     ('generic', 'List', [('type', 'int')]),
-     'numeros',
-     ('array', [1, 2, 3])),
-    ('=', ('subscript', ('var', 'numeros'), 0), [('str', 'Hola')])])])

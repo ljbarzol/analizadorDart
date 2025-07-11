@@ -1,0 +1,16 @@
+--- Análisis Semántico de: algoritmo3.dart (Usuario: AlejandroSV2004) ---
+
+
+--- Resultado del Análisis Semántico ---
+
+[OK] Parámetro 'arr' registrado como List<int>
+[OK] Función 'insertionSort' analizada correctamente con tipo de retorno 'void'
+[OK] Variable 'numbers' declarada como List<int>
+[OK] Función 'main' analizada correctamente con tipo de retorno 'void'
+{'insertionSort': {'tipo': 'void', 'parametros': [(('generic', 'List', [('type', 'int')]), 'arr')]}, 'main': {'tipo': 'void', 'parametros': []}}
+
+--- Tabla de Símbolos ---
+{'insertionSort': {'parametros': [(('generic', 'List', [('type', 'int')]),
+                                   'arr')],
+                   'tipo': 'void'},
+ 'main': {'parametros': [], 'tipo': 'void'}}

@@ -1,0 +1,275 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #e0e0e0;
+}
+
+.header {
+  background-color: #2b9edb;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.header-container {
+            display: flex;
+            justify-content: space-between; /* Distribuye el espacio entre elementos */
+            align-items: center; /* Centra verticalmente */
+            padding: 10px 20px; /* Espacio interno (arriba/abajo - izquierda/derecha) */
+            background-color: #2b9edb;
+            color: white;
+}
+
+.header-logo {
+    height: 50px;  /* Ajusta según el tamaño de tu logo */
+    width: auto;   /* El ancho se ajusta proporcionalmente */
+    object-fit: contain; /* Evita distorsión */
+}
+
+.fit-picture {
+  width: 250px;
+}
+
+/* Contenedor principal */
+.button-group {
+  display: flex;
+  gap: 8px; /* Espacio entre botones */
+  width: 100%; /* Ocupa todo el ancho disponible */
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* Estilo base mejorado */
+.button-analizador {
+  flex: 1; /* Distribuye el espacio equitativamente */
+  min-width: 120px; /* Ancho mínimo para móviles */
+  padding: 12px 0; /* Más altura para mejor tacto */
+  border: none; /* Eliminamos el borde */
+  border-radius: 8px; /* Bordes más redondeados */
+  background-color: #1a1a1a; /* Negro más moderno */
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Hover sutil */
+.button-analizador:not(.active):hover {
+  background-color: #2d2d2d;
+  transform: translateY(-1px);
+}
+
+/* Estado activo - Sin bordes, puro color */
+.button-analizador.active {
+  background-color: #2b9edb;
+  color: white;
+  box-shadow: 0 4px 8px rgba(43, 158, 219, 0.2);
+}
+
+/* Efecto al hacer clic */
+.button-analizador:active {
+  transform: scale(0.98);
+}
+
+
+
+
+.container {
+  display: flex;
+  height: calc(100vh - 50px);
+}
+
+.left, .right {
+  flex: 1;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.left {
+  background-color: #222;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.right {
+  background-color: #111;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+textarea {
+  flex: 1;
+  resize: none;
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.buttons {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.buttons button {
+  flex: 1;
+  background-color: #0062a1;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  padding-bottom: 30px; /* Espacio para el icono */
+}
+
+.output-title {
+  /* Fondo y bordes */
+  background-color: #2d696e; /* Gris oscuro elegante */
+  color: white;
+  border-radius: 4px; /* Mismo radio que los botones */
+  border: none;
+  
+  /* Tipografía */
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-align: center;
+  
+  /* Espaciado y dimensiones */
+  padding: 13px 10px;
+  margin: 0 0 10px 0;
+  display: inline-block; /* Se ajusta al contenido */
+  width: auto; /* Ancho según texto */
+  min-width: 200px; /* Ancho mínimo elegante */
+  
+  /* Sombra sutil para profundidad */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+  /* Efecto visual sutil (opcional) */
+  position: relative;
+  overflow: hidden;
+}
+
+.code-editor-container {
+  width: 100%;
+  background: #1e1e1e;
+  border-radius: 6px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px 8px 8px;
+}
+
+.code-textarea {
+  width: 100%;
+  min-height: 150px;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 0px;
+  font-family: 'Consolas', monospace;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 20px;
+  margin-top: 5px;
+}
+
+.run-button {
+  background: #4CAF50;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 15px;
+  right: 2px;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.run-icon {
+  font-size: 15px;
+  padding: 3px;
+}
+
+/* Estilos para los resultados */
+.result-template {
+  display: none;
+  margin-top: 0px;
+}
+
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  margin: 15px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.token-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.token-table th {
+  background-color: #f5f5f5;
+  position: sticky;
+  top: 0;
+  padding: 10px;
+  text-align: left;
+}
+
+.token-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.token-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.token-table tr:hover {
+  background-color: #f0f0f0;
+}
+
+.token-count {
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: #d32f2f;
+  padding: 15px;
+  background-color: #fdecea;
+  border-radius: 4px;
+  margin-top: 15px;
+}
+
+.loading-message {
+  color: #1976d2;
+  font-style: italic;
+}
