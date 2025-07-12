@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import PhotoImage
+from PIL import Image, ImageTk
 from lexico import analizar_lexico
 from sintactico import analizar_sintactico
 from semantico import analizar_semantico
@@ -17,12 +19,31 @@ FG_TEXT = "#FFFFFF"
 COLOR_BUTTON = "#7289DA"
 COLOR_OUTPUT = "#99AAB5"
 
+from PIL import Image, ImageTk
+
 # --- Título superior ---
+# Cargar y redimensionar logos
+img_dart = Image.open("logo_dart.png").resize((40, 40))
+logo_dart = ImageTk.PhotoImage(img_dart)
+
+img_python = Image.open("logo_python.png").resize((40, 40))
+logo_python = ImageTk.PhotoImage(img_python)
+
 frame_titulo = tk.Frame(root, bg=COLOR_BUTTON, height=50)
 frame_titulo.pack(fill=tk.X)
+
+# Logo Dart a la izquierda
+lbl_logo_dart = tk.Label(frame_titulo, image=logo_dart, bg=COLOR_BUTTON)
+lbl_logo_dart.pack(side=tk.LEFT, padx=10)
+
+# Título centrado
 lbl_titulo = tk.Label(frame_titulo, text="ANALIZADOR DE CÓDIGO EN DART", bg=COLOR_BUTTON,
                       fg=FG_TEXT, font=("Arial", 16, "bold"))
-lbl_titulo.pack(pady=10)
+lbl_titulo.pack(side=tk.LEFT, expand=True)
+
+# Logo Python a la derecha
+lbl_logo_python = tk.Label(frame_titulo, image=logo_python, bg=COLOR_BUTTON)
+lbl_logo_python.pack(side=tk.RIGHT, padx=10)
 
 # --- Contenedor principal ---
 frame_main = tk.Frame(root, bg=BG_MAIN)
@@ -37,21 +58,29 @@ frame_buttons = tk.Frame(frame_left, bg=BG_PANEL)
 frame_buttons.pack(fill=tk.X, pady=5)
 
 def run_lexico():
+    text_output.config(state="normal")
     limpiar_output()
     resultado = analizar_lexico(text_codigo.get("1.0", tk.END).strip())
     text_output.insert(tk.END, "\n".join(resultado))
+    text_output.config(state="disabled")
 
 def run_sintactico():
+    text_output.config(state="normal")
     limpiar_output()
     resultado = analizar_sintactico(text_codigo.get("1.0", tk.END).strip())
     text_output.insert(tk.END, "\n".join(resultado))
+    text_output.config(state="disabled")
+
 
 def run_semantico():
+    text_output.config(state="normal")
     limpiar_output()
     resultado = analizar_semantico(text_codigo.get("1.0", tk.END).strip())
     text_output.insert(tk.END, "\n".join(resultado))
+    text_output.config(state="disabled")
 
 def run_todo():
+    text_output.config(state="normal")
     limpiar_output()
     codigo = text_codigo.get("1.0", tk.END).strip()
     
@@ -63,9 +92,15 @@ def run_todo():
     
     text_output.insert(tk.END, "============================== SEMÁNTICO ==============================\n")
     text_output.insert(tk.END, "\n".join(analizar_semantico(codigo)) + "\n\n")
+    text_output.config(state="disabled")
+
 
 def limpiar_output():
     text_output.delete("1.0", tk.END)
+    
+def limpiar_codigo():
+    text_codigo.delete("1.0", tk.END)
+
 
 btn_lexico = tk.Button(frame_buttons, text="ANALIZADOR LÉXICO", bg=COLOR_BUTTON, fg=FG_TEXT,
                        command=run_lexico, width=20)
@@ -83,6 +118,17 @@ btn_todo = tk.Button(frame_buttons, text="ANALIZAR TODO", bg="#43B581", fg=FG_TE
                      command=run_todo, width=20)
 btn_todo.pack(side=tk.LEFT, padx=2)
 
+btn_limpiar = tk.Button(
+    frame_buttons,
+    text="🧹 LIMPIAR",
+    bg="#FF5555",
+    fg=FG_TEXT,
+    command=limpiar_codigo,
+    width=15
+)
+btn_limpiar.pack(side=tk.RIGHT, padx=2)
+
+
 # TextArea para código
 text_codigo = tk.Text(frame_left, bg="#2C2F33", fg=FG_TEXT, insertbackground=FG_TEXT,
                       font=("Consolas", 12))
@@ -98,6 +144,7 @@ lbl_output.pack(fill=tk.X)
 
 text_output = tk.Text(frame_right, bg="#23272A", fg=FG_TEXT, insertbackground=FG_TEXT,
                       font=("Consolas", 11))
+
 text_output.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
 root.mainloop()
