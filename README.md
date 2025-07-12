@@ -10,25 +10,6 @@ Incluye:
 
 ---
 
-## 📁 **Estructura del proyecto**
-
-├── lexico.py
-├── sintactico.py
-├── semantico.py
-├── gui.py
-├── algoritmos/
-│   ├── algoritmo1.dart
-│   ├── algoritmo2.dart
-│   └── algoritmo3.dart
-├── logsLex/
-├── logsSintax/
-├── logsSem/
-├── logo_dart.png
-├── logo_python.png
-└── README.md
-
----
-
 ## ⚙️ Requisitos
 
 ### Python
