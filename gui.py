@@ -54,9 +54,15 @@ def run_semantico():
 def run_todo():
     limpiar_output()
     codigo = text_codigo.get("1.0", tk.END).strip()
-    text_output.insert(tk.END, f"Analizador léxico:\n{''.join(analizar_lexico(codigo))}\n\n")
-    text_output.insert(tk.END, f"Analizador sintáctico:\n{''.join(analizar_sintactico(codigo))}\n\n")
-    text_output.insert(tk.END, f"Analizador semántico:\n{''.join(analizar_semantico(codigo))}")
+    
+    text_output.insert(tk.END, "=============================== LÉXICO ================================\n")
+    text_output.insert(tk.END, "\n".join(analizar_lexico(codigo)) + "\n\n")
+    
+    text_output.insert(tk.END, "============================== SINTÁCTICO ==============================\n")
+    text_output.insert(tk.END, "\n".join(analizar_sintactico(codigo)) + "\n\n")
+    
+    text_output.insert(tk.END, "============================== SEMÁNTICO ==============================\n")
+    text_output.insert(tk.END, "\n".join(analizar_semantico(codigo)) + "\n\n")
 
 def limpiar_output():
     text_output.delete("1.0", tk.END)

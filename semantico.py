@@ -560,15 +560,19 @@ for archivo, usuario in archivos_usuarios.items():
 # ANALIZADOR SEMÁNTICO PARA LA INTERFAZ
 # -------------------------
 
+from pprint import pformat
+
 def analizar_semantico(codigo):
-    from sintactico import parser, lexer  # Usa tu parser construido y lexer de sintáctico
-    symbol_table = {}  # Tabla de símbolos limpia para cada ejecución
-    lexer.lineno = 1   # Resetea línea
+    from sintactico import parser, lexer
+    symbol_table = {}
+    lexer.lineno = 1
     try:
         ast = parser.parse(codigo, lexer=lexer)
         if not ast:
             return ["Error: No se pudo generar AST. Revisa tu entrada."]
         analizar(ast, symbol_table)
-        return ["Todo está bien: sin errores semánticos."]
+        resultado = ["Todo está bien: sin errores semánticos.\n", "", "Tabla de símbolos:"]
+        resultado.append(pformat(symbol_table))
+        return resultado
     except Exception as e:
         return [f"Error semántico: {e}"]

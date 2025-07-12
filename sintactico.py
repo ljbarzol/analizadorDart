@@ -553,25 +553,29 @@ for archivo, usuario in archivos_usuarios.items():
 # -------------------------------
 
 def analizar_sintactico(codigo):
-    from lexico import lexer  # Usa el lexer que ya tienes
+    from lexico import lexer
+    from pprint import pformat
+
     errores = []
 
-    # Función de error personalizada
     def custom_error(p):
         if p:
             errores.append(f"Error de sintaxis: token '{p.type}' con valor '{p.value}'")
         else:
             errores.append("Error de sintaxis: fin de entrada inesperado")
 
-    # Construir parser con función de error temporal
     local_parser = yacc.yacc()
     local_parser.errorfunc = custom_error
 
-    lexer.lineno = 1  # Reset de línea
+    lexer.lineno = 1
     try:
         result = local_parser.parse(codigo, lexer=lexer)
         if result:
-            return ["Todo está bien: sin errores sintácticos."]
+            return [
+                "Todo está bien: sin errores sintácticos.\n",
+                "AST generado:\n",
+                pformat(result)
+            ]
         elif errores:
             return errores
         else:

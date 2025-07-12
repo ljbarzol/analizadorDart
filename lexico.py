@@ -187,20 +187,15 @@ for archivo_nombre in archivos:
 # -------------------------------
 
 def analizar_lexico(codigo):
-    """
-    Función para usar desde la GUI.
-    Recibe código como string.
-    Devuelve lista de resultados como strings.
-    """
     lexer.lineno = 1
     lexer.input(codigo)
     resultado = []
     try:
         for tok in lexer:
-            resultado.append(f"Token: {tok.type}, Valor: {tok.value}, Línea: {tok.lineno}")
+            resultado.append(f"  Token: {tok.type}\n    Valor: {tok.value}\n    Línea: {tok.lineno}\n")
     except Exception as e:
         resultado.append(f"Error léxico: {e}")
-    if not resultado:
+    if len(resultado) == 1:
         resultado.append("Todo está bien: sin errores léxicos.")
     return resultado
 
