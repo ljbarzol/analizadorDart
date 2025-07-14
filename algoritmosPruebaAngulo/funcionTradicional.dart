@@ -1,20 +1,23 @@
-String clasificarNota(int nota) {
-  if (nota < 0 || nota > 100) {
-    return "Nota inválida";
-  } else if (nota >= 90) {
-    return "Excelente";
-  } else if (nota >= 75) {
-    return "Muy bien";
-  } else if (nota >= 60) {
-    return "Suficiente";
-  } else {
-    return "Reprobado";
+// Función que calcula el factorial de un número entero positivo
+int factorial(int n) {
+  if (n < 0) {
+    throw ArgumentError('El número debe ser positivo');
   }
+  
+  int resultado = 1;
+  for (int i = 1; i <= n; i++) {
+    resultado *= i;
+  }
+  return resultado;
 }
 
 void main() {
-  int nota = 85;
-  String resultado = clasificarNota(nota);
-  print("Resultado: $resultado");
+  int numero = 5;
+  try {
+    int fact = factorial(numero);
+    print('El factorial de $numero es $fact');
+  } catch (e) {
+    print('Error: $e');
+  }
 }
 
