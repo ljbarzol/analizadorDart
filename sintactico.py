@@ -558,27 +558,29 @@ def analizar_sintactico(codigo):
 
     errores = []
 
-    def custom_error(p):
+    # Función de manejo de errores que agrega al arreglo de errores
+    def p_error(p):
         if p:
-            errores.append(f"Error de sintaxis: token '{p.type}' con valor '{p.value}'")
+            errores.append(f"Error de sintaxis: token inesperado '{p.type}' con valor '{p.value}'")
         else:
             errores.append("Error de sintaxis: fin de entrada inesperado")
 
-    local_parser = yacc.yacc()
-    local_parser.errorfunc = custom_error
+    # Construir un parser NUEVO cada vez para GUI
+    local_parser = yacc.yacc(errorlog=yacc.NullLogger())  # Desactiva logs ruidosos
+    local_parser.errorfunc = p_error  # Esta línea NO surte efecto: PLY usa p_error por nombre
 
     lexer.lineno = 1
     try:
         result = local_parser.parse(codigo, lexer=lexer)
-        if result:
+        if errores:
+            return errores
+        elif result:
             return [
-                "Todo está bien: sin errores sintácticos.\n",
-                "AST generado:\n",
+                "Todo está bien: sin errores sintácticos.",
+                "--- AST generado ---",
                 pformat(result)
             ]
-        elif errores:
-            return errores
         else:
             return ["No se generó AST. Revisa tu entrada."]
     except Exception as e:
-        return [f"Error sintáctico: {e}"]
+        return [f" Error sintáctico inesperado: {e}"]
