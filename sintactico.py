@@ -9,7 +9,8 @@ from lexico import lexer
 
 #Regla inicial 
 start = 'program'
-
+#HILDA ANGULO
+#Declaracion de Variables
 def p_program(p):
     '''program : declaration_list'''
     p[0] = ("program", p[1])
@@ -26,8 +27,9 @@ def p_declaration(p):
     '''declaration : class
                    | function_declaration
                    | variable_declaration SEMICOLON
-                   | import_statement
-                   | const_declaration SEMICOLON'''
+                   | const_declaration SEMICOLON
+                   | final_declaration SEMICOLON
+                   | import_statement'''
     p[0] = p[1]
 
 def p_import_statement(p):
@@ -214,13 +216,9 @@ def p_expression_binaria(p):
                   | expression INTDIV expression
                   | expression MODULE expression'''
     p[0] = (p[2], p[1], p[3])
-
-def p_expression_term(p):
-    'expression : term'
-    p[0] = p[1]
-
-def p_term_factor(p):
-    'term : factor'
+    
+def p_expression_simple(p):
+    '''expression : factor'''
     p[0] = p[1]
 
 def p_factor_static_call(p):
@@ -229,11 +227,15 @@ def p_factor_static_call(p):
 
 def p_factor_number(p):
     'factor : NUMBER'
-    p[0] = p[1]
+    if isinstance(p[1], int):
+        p[0] = ('int_lit', p[1])
+    else:
+        p[0] = ('double_lit', p[1])
 
 def p_factor_string(p):
     'factor : STRING_LITERAL'
-    p[0] = p[1]
+    p[0] = ('string_lit', p[1])
+
 
 def p_factor_id(p):
     '''factor : ID
@@ -259,6 +261,8 @@ def p_instructions(p):
 
 def p_instruction(p):
     '''instruction : variable_declaration SEMICOLON
+                   | final_declaration SEMICOLON  
+                   | const_declaration SEMICOLON
                    | expression SEMICOLON
                    | print_statement
                    | if_else
@@ -268,10 +272,10 @@ def p_instruction(p):
                    | block_statement
                    | throw_statement
                    | try_statement
-                   | const_declaration SEMICOLON
                    | break_statement
                    | continue_statement'''
     p[0] = p[1]
+
 
 def p_try_statement(p):
     '''try_statement : TRY block_statement catch_clauses
@@ -310,6 +314,9 @@ def p_finally_clause(p):
     'finally_clause : FINALLY block_statement'
     p[0] = p[2]
 
+def p_final_declaration(p):
+    '''final_declaration : FINAL declaration_type ID EQUALS expression'''
+    p[0] = ('final_declaration', p[2], p[3], p[5])
 
 def p_block_statement(p):
     'block_statement : LBRACE instructions RBRACE'
@@ -337,10 +344,10 @@ def p_expression_assignment(p):
                   | expression NULLASSIGN expression'''
     p[0] = (p[2], p[1], p[3])
 
+
 def p_expression_ternary(p): #Alejandro Sornoza
     '''expression : expression QMARK expression COLON expression'''
     p[0] = ("ternary", p[1], p[3], p[5])
-
 
 # Impresion 
 def p_print_statement(p):

@@ -3,7 +3,8 @@ from contextlib import redirect_stdout
 from sintactico import parser, lexer
 import os
 from datetime import datetime
-
+from io import StringIO
+from pprint import pformat
 # -------------------------
 # Tabla de símbolos global
 # -------------------------
@@ -39,6 +40,8 @@ def analizar(ast, symbol_table):
             manejar_variable(decl, symbol_table)
         elif tipo == 'const_declaration':
             manejar_variable(decl, symbol_table, constante=True)
+        elif tipo == 'final_declaration':   
+            manejar_variable(decl, symbol_table, constante=True)
 
     # Segunda pasada: analizar cuerpos de funciones y expresiones globales
     for decl in declaraciones:
@@ -54,6 +57,8 @@ def analizar_declaracion(node, tabla):
         # Ya manejada en la pasada 1
         pass
     elif tipo == 'const_declaration':
+        pass
+    elif tipo == 'final_declaration':
         pass
     elif tipo == 'function':
         analizar_funcion(node, tabla)
@@ -84,9 +89,12 @@ def manejar_variable(node, tabla, constante=False):
         tabla[nombre] = tipo_esperado
 
     if valor is not None:
-        tipo_valor = evaluar_expr(valor, tabla)
-        if not tipos_compatibles(tipo_esperado, tipo_valor):
-            raise Exception(f"Tipo incorrecto en '{nombre}': se esperaba {tipo_esperado}, se recibió {tipo_valor}")
+       tipo_valor = evaluar_expr(valor, tabla)
+       if tipo_esperado == 'var':
+           tipo_esperado = tipo_valor
+           tabla[nombre] = tipo_esperado
+       elif not tipos_compatibles(tipo_esperado, tipo_valor):
+           raise Exception(f"Tipo incorrecto en '{nombre}': se esperaba {tipo_esperado}, se recibió {tipo_valor}")
 
     print(f"[OK] {'Constante' if constante else 'Variable'} '{nombre}' declarada como {tipo_esperado}")
 
@@ -97,12 +105,40 @@ def obtener_tipo(tipo):
         elif tipo[0] == 'nullable_type':
             return obtener_tipo(tipo[1]) + '?'
         elif tipo[0] == 'generic':
-            # Manejar tipos genéricos como List<int>
             tipo_base = tipo[1]
             tipo_param = obtener_tipo(tipo[2][0])
             return f"{tipo_base}<{tipo_param}>"
+        elif tipo[0] == 'set':
+            elementos = tipo[1]
+            tipos_elementos = set()
+            for elemento in elementos:
+                tipo_elem = obtener_tipo(elemento) if isinstance(elemento, tuple) else evaluar_expr(elemento, {})
+                tipos_elementos.add(tipo_elem)
+            if len(tipos_elementos) == 1:
+                return f"Set<{tipos_elementos.pop()}>"
+            else:
+                return "Set<dynamic>"
+        elif tipo[0] == 'map':
+            pares = tipo[1]
+            tipos_keys = set()
+            tipos_vals = set()
+            for clave, valor in pares:
+                tipo_k = obtener_tipo(clave) if isinstance(clave, tuple) else evaluar_expr(clave, {})
+                tipo_v = obtener_tipo(valor) if isinstance(valor, tuple) else evaluar_expr(valor, {})
+                tipos_keys.add(tipo_k)
+                tipos_vals.add(tipo_v)
+            tipo_k = tipos_keys.pop() if len(tipos_keys) == 1 else "dynamic"
+            tipo_v = tipos_vals.pop() if len(tipos_vals) == 1 else "dynamic"
+            return f"Map<{tipo_k}, {tipo_v}>"
+
     elif isinstance(tipo, str):
         return tipo
+    elif isinstance(tipo, int):
+        return "int"
+    elif isinstance(tipo, float):
+        return "double"
+    elif isinstance(tipo, bool):
+        return "bool"
     return "unknown"
 
 # -------------------------
@@ -139,6 +175,22 @@ def evaluar_expr(expr, tabla):
             if isinstance(tipo_simbolo, dict):
                 return tipo_simbolo["tipo"]  # función
             return tipo_simbolo  # variable
+        elif op == "ternary":
+            condicion = expr[1]
+            verdadero = expr[2]
+            falso = expr[3]
+
+            tipo_cond = evaluar_expr(condicion, tabla)
+            if tipo_cond != "bool":
+                raise Exception(f"Condición del ternario debe ser booleana, se recibió {tipo_cond}")
+
+            tipo_v = evaluar_expr(verdadero, tabla)
+            tipo_f = evaluar_expr(falso, tabla)
+
+            if tipos_compatibles(tipo_v, tipo_f):
+                return tipo_v  # o tipo_f, son iguales
+            else:
+                return "dynamic"
 
         elif op == "call":
             funcion = expr[1]
@@ -156,7 +208,8 @@ def evaluar_expr(expr, tabla):
                 objeto = funcion[1]
                 metodo = funcion[2]
                 tipo_objeto = evaluar_expr(objeto, tabla)
-                
+                for arg in args:
+                    evaluar_expr(arg, tabla)
                 # Manejar métodos conocidos de tipos específicos
                 if tipo_objeto == "Stdin" and metodo == "readLineSync":
                     return "String?"
@@ -214,8 +267,28 @@ def evaluar_expr(expr, tabla):
                 return f"List<{tipo_elementos.pop()}>"
             else:
                 return "List<dynamic>"
+        elif op == "set":
+            elementos = expr[1]
+            tipos_elementos = set()
+            for elemento in elementos:
+                tipos_elementos.add(evaluar_expr(elemento, tabla))
+            if len(tipos_elementos) == 1:
+                return f"Set<{tipos_elementos.pop()}>"
+            else:
+                return "Set<dynamic>"
 
-        elif op in ('+', '-', '*', '/', '//'):
+        elif op == "map":
+            pares = expr[1]
+            tipos_keys = set()
+            tipos_vals = set()
+            for clave, valor in pares:
+                tipos_keys.add(evaluar_expr(clave, tabla))
+                tipos_vals.add(evaluar_expr(valor, tabla))
+            tipo_k = tipos_keys.pop() if len(tipos_keys) == 1 else "dynamic"
+            tipo_v = tipos_vals.pop() if len(tipos_vals) == 1 else "dynamic"
+            return f"Map<{tipo_k}, {tipo_v}>"
+
+        elif op in ('+', '-', '*', '/', '//', '%'):
             t1 = evaluar_expr(expr[1], tabla)
             t2 = evaluar_expr(expr[2], tabla)
             return promover_tipo(t1, t2)
@@ -298,17 +371,23 @@ def evaluar_expr(expr, tabla):
     elif isinstance(expr, float):
         return "double"
     elif isinstance(expr, str):
-        # Manejar literales booleanos que aparecen como strings
+    # Manejar booleanos que vienen como string
         if expr == "true" or expr == "false":
             return "bool"
+    # Validar si el string es realmente un número entero
+        try:
+            int(expr)
+            return "int"
+        except ValueError:
+            pass
+        try:
+            float(expr)
+            return "double"
+        except ValueError:
+            pass
+    # Si no es número, es cadena
         return "String"
-    # Si es un valor negativo representado como un número (por ejemplo, -1)
-    try:
-        if isinstance(expr, (int, float)):
-            return "int" if isinstance(expr, int) else "double"
-    except Exception:
-        pass
-    return "unknown"
+
 
 # -------------------------
 # Compatibilidad de tipos
@@ -316,9 +395,20 @@ def evaluar_expr(expr, tabla):
 def tipos_compatibles(esperado, actual):
     if esperado == actual:
         return True
+    # Promoción válida: int se puede usar donde se espera double
     if esperado == "double" and actual == "int":
         return True
+    # Colecciones genéricas compatibles
+    if esperado.startswith("List<") and actual.startswith("List<"):
+        return True
+    if esperado.startswith("Map<") and actual.startswith("Map<"):
+        return True
+    if esperado.startswith("Set<") and actual.startswith("Set<"):
+        return True
+    # TODO: Aquí NO permitir int vs String ni bool vs int, etc.
     return False
+
+
 
 def promover_tipo(t1, t2):
     if "double" in (t1, t2):
@@ -564,15 +654,22 @@ from pprint import pformat
 
 def analizar_semantico(codigo):
     from sintactico import parser, lexer
+    from contextlib import redirect_stdout
+
     symbol_table = {}
     lexer.lineno = 1
+    buffer = StringIO()  # Captura todo lo que se imprime
+
     try:
         ast = parser.parse(codigo, lexer=lexer)
         if not ast:
             return ["Error: No se pudo generar AST. Revisa tu entrada."]
-        analizar(ast, symbol_table)
-        resultado = ["Todo está bien: sin errores semánticos.\n", "", "Tabla de símbolos:"]
-        resultado.append(pformat(symbol_table))
+        
+        with redirect_stdout(buffer):
+            analizar(ast, symbol_table)
+        
+        salida_ok = buffer.getvalue()
+        resultado = ["--- Resultado del Análisis Semántico ---", salida_ok.strip(), "--- Tabla de Símbolos ---", pformat(symbol_table)]
         return resultado
     except Exception as e:
         return [f"Error semántico: {e}"]
